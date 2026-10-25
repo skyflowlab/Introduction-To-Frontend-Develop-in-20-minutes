@@ -139,6 +139,7 @@ h4 { margin: 0 0 6px; font-size: 20px; }
 .banner { background: linear-gradient(90deg, var(--panel2), var(--panel)); border: 1px solid var(--line); border-radius: 14px; padding: 14px 20px; text-align: center; font-size: 24px; }
 .banner.big { font-size: 30px; font-weight: 700; }
 .banner b { color: var(--accent); }
+.banner .formula { font: 800 30px var(--mono); margin-right: 8px; color: var(--text); }
 .bul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
 .bul li { padding-left: 22px; position: relative; font-size: 22px; }
 .bul li::before { content: ''; position: absolute; left: 0; top: .6em; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
@@ -223,7 +224,10 @@ pre.code { margin: 0; padding: 14px 18px; font: 19px/1.5 var(--mono); white-spac
 .tab-panel.on { display: block; }
 
 /* ============ loop widget ============ */
-.loop { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
+.loop { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+.loop .lp-btn { padding: 7px; font-size: 17px; }
+.loop .lp-ui { padding: 8px 12px; }
+.loop .lp-n { font-size: 22px; }
 .lp-row { display: flex; align-items: center; gap: 6px; }
 .lp-box { flex: 1; background: var(--code-bg); border: 2px solid var(--line); border-radius: 12px; padding: 8px; text-align: center; display: flex; flex-direction: column; gap: 2px; transition: .25s; font-size: 17px; }
 .lp-box small { font-size: 13px; color: var(--muted); }

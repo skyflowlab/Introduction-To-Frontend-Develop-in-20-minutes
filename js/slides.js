@@ -408,10 +408,9 @@ localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. �
             <div class="frag">${code('svelte', S.cmpSvelte, { size: 'sm', label: t('③ Svelte 5 — 같은 아이디어, 더 짧게', '③ Svelte 5 — same idea, even shorter') })}</div>
           </div>
         </div>
-        <div class="frag banner big">UI = f( state )</div>
-        <div class="frag banner">${t(
-          '<b>명령형(how)</b>: DOM을 손으로 고침 → <b>선언형(what)</b>: state가 이러면 화면은 이렇다',
-          '<b>Imperative (how)</b>: patch the DOM by hand → <b>Declarative (what)</b>: given this state, the UI looks like this'
+        <div class="frag banner"><b class="formula">UI = f( state )</b> ${t(
+          '— <b>명령형(how)</b>에서 <b>선언형(what)</b>으로',
+          '— from <b>imperative (how)</b> to <b>declarative (what)</b>'
         )}</div>`,
     },
 
