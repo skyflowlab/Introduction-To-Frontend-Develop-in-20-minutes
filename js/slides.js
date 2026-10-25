@@ -347,10 +347,10 @@ CSS에서는 한 가지 요령만 기억하세요. 모양이 바뀌어야 하는
 첫째, state. 할 일 목록을 배열 하나로 가지고 있습니다. 이게 진실의 원천이에요. 화면이 아니라 이 배열이 정답입니다.
 둘째, render 함수. state를 보고 DOM을 처음부터 다시 그립니다.
 셋째, 이벤트. 사용자가 뭔가 하면 DOM을 직접 만지지 않고 state만 바꾼 다음 render를 다시 부릅니다.
-이 "state가 바뀌면 화면을 다시 계산한다"는 패턴이 바로 React의 핵심 아이디어입니다. 기억해 두세요. 뒤에서 다시 만납니다.`,
+이 "state가 바뀌면 화면을 다시 그린다"는 패턴은 프레임워크 없이 순수 JavaScript만으로 충분히 만들 수 있습니다. 지금은 이 코드를 그대로 이해하는 데 집중해 주세요. ▶ 프레임워크 이야기는 하지 않습니다.`,
       render: ({ t, code }) => `
         ${code('js', S.stepState, { steps: true })}
-        <div class="frag banner big">UI = render( state ) ${t('— 이 루프가 React의 출발점', '— this loop is where React starts')}</div>`,
+        <div class="frag banner big">UI = render( state ) ${t('— 상태가 바뀌면 화면을 다시 그린다', '— when state changes, redraw the UI')}</div>`,
     },
 
     {
