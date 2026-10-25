@@ -190,26 +190,27 @@ render();`;
   color: #999;
 }`;
 
-  S.stepState = `// 1. State — the single source of truth
-let tasks = [];            // [{ id, title, done }]
+  S.stepState = `// 1. Find — the DOM is a tree that JS can reach
+const $list = document.querySelector('#list');
 §§
-// 2. render — draw the DOM from state
-function render() {
-  $list.innerHTML = '';
-  for (const t of tasks) {
-    const li = document.createElement('li');
-    li.className = t.done ? 'done' : '';
-    li.textContent = t.title;
-    $list.append(li);
-  }
-}
+// 2. Change — create, insert, edit, remove
+const li = document.createElement('li');
+li.textContent = 'Write talk';
+$list.append(li);              // on screen right away
+li.classList.add('done');      // CSS .done → strikethrough
+li.remove();                   // gone again
 §§
-// 3. Event → change state → render again
+// 3. Listen — user action → handler → DOM change
 $form.addEventListener('submit', (e) => {
   e.preventDefault();
-  tasks.push({ id: Date.now(), title: $input.value, done: false });
-  render();
-});`;
+  const li = document.createElement('li');
+  li.textContent = $input.value;
+  $list.append(li);
+  $input.value = '';
+});
+§§
+// 4. Real apps also keep the data in a variable
+let tasks = [];                // see the full code in the demo`;
 
   S.stepPersist = `// Persist: state → string → localStorage
 function save() {

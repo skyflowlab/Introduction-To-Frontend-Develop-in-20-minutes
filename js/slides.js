@@ -342,15 +342,25 @@ CSS에서는 한 가지 요령만 기억하세요. 모양이 바뀌어야 하는
       id: 'step2',
       part: 3,
       sec: 50,
-      title: { ko: 'Step 2 — state → render', en: 'Step 2 — state → render' },
-      notes: `2단계가 오늘 가장 중요한 슬라이드입니다. 코드가 세 덩어리로 나뉩니다.
-첫째, state. 할 일 목록을 배열 하나로 가지고 있습니다. 이게 진실의 원천이에요. 화면이 아니라 이 배열이 정답입니다.
-둘째, render 함수. state를 보고 DOM을 처음부터 다시 그립니다.
-셋째, 이벤트. 사용자가 뭔가 하면 DOM을 직접 만지지 않고 state만 바꾼 다음 render를 다시 부릅니다.
-이 "state가 바뀌면 화면을 다시 그린다"는 패턴은 프레임워크 없이 순수 JavaScript만으로 충분히 만들 수 있습니다. 지금은 이 코드를 그대로 이해하는 데 집중해 주세요. ▶ 프레임워크 이야기는 하지 않습니다.`,
+      title: { ko: 'Step 2 — JavaScript로 DOM 바꾸기', en: 'Step 2 — Changing the DOM with JavaScript' },
+      notes: `2단계는 JavaScript가 웹 페이지를 실제로 바꾸는 방법입니다. 핵심은 DOM이에요. 브라우저는 HTML을 DOM이라는 트리 객체로 만들어 두고, JavaScript는 그 객체를 직접 만질 수 있습니다.
+첫째, 찾기. querySelector로 DOM의 원하는 요소를 잡습니다.
+둘째, 바꾸기. createElement로 요소를 만들고, append로 붙이고, textContent로 글자를 바꾸고, classList로 클래스를 넣고 빼고, remove로 지웁니다. 코드가 실행되는 순간 화면이 바뀝니다.
+셋째, 이벤트. 사용자가 제출이나 클릭을 하면 우리가 등록한 함수가 실행되고, 그 안에서 DOM을 바꿉니다. 사용자 동작, 핸들러, DOM 변경. 이 흐름이 웹 인터랙션의 전부입니다.
+아래 그림을 보면, DOM이 바뀔 때마다 브라우저가 스타일을 다시 계산하고, 배치를 잡고, 화면에 다시 그립니다. 그래서 CSS가 .done 클래스만 보고 취소선을 그려 주는 거예요.
+마지막으로 실제 앱은 데이터를 배열 같은 변수에 들고 있으면서 이 DOM 조작을 합니다. 전체 코드는 앞의 데모에 있습니다.
+▶ 여기서는 프레임워크 이야기를 하지 않고, 순수 JavaScript의 DOM 조작만 설명합니다.`,
       render: ({ t, code }) => `
         ${code('js', S.stepState, { steps: true })}
-        <div class="frag banner big">UI = render( state ) ${t('— 상태가 바뀌면 화면을 다시 그린다', '— when state changes, redraw the UI')}</div>`,
+        <div class="frag callout">
+          <h4>${t('DOM이 바뀌면 브라우저는…', 'When the DOM changes, the browser…')}</h4>
+          <div class="chips">
+            <span class="chip">DOM ${t('변경', 'change')}</span><span class="chip">→</span>
+            <span class="chip">Style ${t('다시 계산', 'recalculate')}</span><span class="chip">→</span>
+            <span class="chip">Layout ${t('배치', 'position')}</span><span class="chip">→</span>
+            <span class="chip">Paint ${t('다시 그리기', 'redraw')}</span>
+          </div>
+        </div>`,
     },
 
     {
@@ -386,7 +396,7 @@ localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. �
       notes: `방금 만든 예제를 다시 떠올려 보세요. 앱이 커질수록 "이 상태가 바뀌면 화면의 어느 부분을 어떻게 고쳐야 하지?"를 우리가 손으로 관리해야 합니다. 이게 점점 지옥이 됩니다.
 프레임워크의 아이디어는 간단합니다. 어떻게 고칠지(how)는 프레임워크에 맡기고, 우리는 state가 이럴 때 화면은 이렇다(what)만 선언합니다.
 ▶ 먼저 왼쪽의 Vanilla JS 카운터를 읽어 줍니다. DOM을 직접 고치는 방식이죠. 다음 키를 누르면 state → render → DOM 그림이 나오니 버튼을 눌러 흐름을 보여주세요. 그다음에야 오른쪽에 React, 그리고 Svelte 버전이 차례로 나타납니다. 같은 카운터를 프레임워크는 어떻게 쓰는지 비교해 주세요.
-문법은 달라도 사상은 같습니다. 하나를 깊이 배우면 나머지는 빨리 배웁니다.`,
+마지막에 한 줄로 정리합니다. UI는 state의 함수, UI = f(state). 화면은 state가 정하고, state가 바뀌면 화면이 다시 계산됩니다. 이게 React를 비롯한 프레임워크의 핵심 아이디어예요. 문법은 달라도 사상은 같으니, 하나를 깊이 배우면 나머지는 빨리 배웁니다.`,
       render: ({ t, code, loop }) => `
         <div class="cols" style="grid-template-columns:1fr 1fr">
           <div class="side">
@@ -398,6 +408,7 @@ localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. �
             <div class="frag">${code('svelte', S.cmpSvelte, { size: 'sm', label: t('③ Svelte 5 — 같은 아이디어, 더 짧게', '③ Svelte 5 — same idea, even shorter') })}</div>
           </div>
         </div>
+        <div class="frag banner big">UI = f( state )</div>
         <div class="frag banner">${t(
           '<b>명령형(how)</b>: DOM을 손으로 고침 → <b>선언형(what)</b>: state가 이러면 화면은 이렇다',
           '<b>Imperative (how)</b>: patch the DOM by hand → <b>Declarative (what)</b>: given this state, the UI looks like this'
@@ -453,7 +464,7 @@ props는 함수의 인자처럼 부모가 자식에게 넘기는 값이고, 자�
       part: 4,
       sec: 55,
       title: { ko: 'React ② state · 리스트 · 불변 업데이트', en: 'React ② State · lists · immutable updates' },
-      notes: `두 번째, state. useState는 "기억하는 변수"를 만듭니다. 값과 그 값을 바꾸는 함수를 한 쌍으로 돌려주고, 바꾸는 함수를 부르면 React가 컴포넌트를 다시 그립니다. 앞서 본 state에서 render로 가는 그 루프예요.
+      notes: `두 번째, state. useState는 "기억하는 변수"를 만듭니다. 값과 그 값을 바꾸는 함수를 한 쌍으로 돌려주고, 바꾸는 함수를 부르면 React가 컴포넌트를 다시 그립니다. 앞에서 본 UI = f(state)가 바로 이 루프예요.
 가장 중요한 규칙은 불변성입니다. 배열을 push로 직접 고치지 말고, 새 배열을 만들어 set 함수에 넘깁니다. 추가는 전개 연산자, 삭제는 filter, 수정은 map을 씁니다. 이 세 패턴만 외우면 됩니다.
 리스트를 그릴 때는 map을 쓰고, 각 항목에 key를 줍니다. key는 인덱스가 아니라 안정적인 id를 쓰세요. 조건부 렌더링은 && 나 삼항 연산자를 씁니다.`,
       render: ({ t, code }) => `
