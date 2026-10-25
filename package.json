@@ -1,0 +1,13 @@
+{
+  "name": "frontend-in-20-minutes",
+  "version": "1.0.0",
+  "description": "Interactive bilingual (KO/EN) presentation: Introduction to frontend development in 20 minutes",
+  "private": true,
+  "scripts": {
+    "start": "node tools/serve.js",
+    "test": "node --test tests/*.test.js",
+    "script": "node tools/export-script.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

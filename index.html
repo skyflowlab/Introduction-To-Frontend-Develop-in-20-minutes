@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frontend in 20 minutes · 20분 프론트엔드 입문</title>
+  <meta name="description" content="HTML, CSS, JavaScript, Node/npm, and React in 20 minutes — an interactive, bilingual (KO/EN) presentation.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238b7bff'/%3E%3Ctext x='32' y='43' font-size='30' font-family='monospace' font-weight='700' text-anchor='middle' fill='white'%3E%26lt;/%26gt;%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="stage" aria-live="polite">
+    <div id="deck"></div>
+    <div id="hud"><div id="progress"></div><span id="timer"></span><span id="counter"></span></div>
+  </div>
+
+  <button class="edge l" id="prev" aria-label="Previous">‹</button>
+  <button class="edge r" id="next" aria-label="Next">›</button>
+
+  <div id="toolbar">
+    <button id="b-lang" title="L">🌐 KO/EN</button>
+    <button id="b-ov" title="O">▦</button>
+    <button id="b-notes" title="N">📝</button>
+    <button id="b-pres" title="P">🎤</button>
+    <button id="b-theme" title="D">◐</button>
+    <button id="b-full" title="F">⛶</button>
+    <button id="b-help" title="?">?</button>
+  </div>
+
+  <div id="overview" class="overlay"></div>
+  <div id="help" class="overlay"></div>
+  <div id="notes"></div>
+  <div id="presenter"></div>
+
+  <noscript>This presentation needs JavaScript.</noscript>
+
+  <script src="js/snippets.js"></script>
+  <script src="js/blocks.js"></script>
+  <script src="js/slides.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
