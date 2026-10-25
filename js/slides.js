@@ -385,19 +385,18 @@ localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. �
       title: { ko: '왜 프레임워크인가', en: 'Why frameworks?' },
       notes: `방금 만든 예제를 다시 떠올려 보세요. 앱이 커질수록 "이 상태가 바뀌면 화면의 어느 부분을 어떻게 고쳐야 하지?"를 우리가 손으로 관리해야 합니다. 이게 점점 지옥이 됩니다.
 프레임워크의 아이디어는 간단합니다. 어떻게 고칠지(how)는 프레임워크에 맡기고, 우리는 state가 이럴 때 화면은 이렇다(what)만 선언합니다.
-▶ 탭을 눌러 같은 카운터를 Vanilla, React, Svelte로 비교해 주세요. 오른쪽 그림에서 버튼을 눌러, state가 바뀌면 render가 돌고 DOM이 갱신되는 흐름을 보여주세요.
+▶ 먼저 왼쪽의 Vanilla JS 카운터를 읽어 줍니다. DOM을 직접 고치는 방식이죠. 다음 키를 누르면 state → render → DOM 그림이 나오니 버튼을 눌러 흐름을 보여주세요. 그다음에야 오른쪽에 React, 그리고 Svelte 버전이 차례로 나타납니다. 같은 카운터를 프레임워크는 어떻게 쓰는지 비교해 주세요.
 문법은 달라도 사상은 같습니다. 하나를 깊이 배우면 나머지는 빨리 배웁니다.`,
-      render: ({ t, tabs, loop }) => `
-        <div class="cols" style="grid-template-columns:6fr 5fr">
-          ${tabs(
-            [
-              { label: 'Vanilla JS', lang: 'js', code: S.cmpVanilla },
-              { label: 'React', lang: 'jsx', code: S.cmpReact },
-              { label: 'Svelte 5', lang: 'svelte', code: S.cmpSvelte },
-            ],
-            { size: 'sm' }
-          )}
-          <div>${loop()}</div>
+      render: ({ t, code, loop }) => `
+        <div class="cols" style="grid-template-columns:1fr 1fr">
+          <div class="side">
+            ${code('js', S.cmpVanilla, { size: 'sm', label: t('① Vanilla JS — DOM을 직접 갱신', '① Vanilla JS — update the DOM by hand') })}
+            <div class="frag">${loop()}</div>
+          </div>
+          <div class="side">
+            <div class="frag">${code('jsx', S.cmpReact, { size: 'sm', label: t('② React — state만 바꾸면 화면은 알아서', '② React — change state, the UI follows') })}</div>
+            <div class="frag">${code('svelte', S.cmpSvelte, { size: 'sm', label: t('③ Svelte 5 — 같은 아이디어, 더 짧게', '③ Svelte 5 — same idea, even shorter') })}</div>
+          </div>
         </div>
         <div class="frag banner">${t(
           '<b>명령형(how)</b>: DOM을 손으로 고침 → <b>선언형(what)</b>: state가 이러면 화면은 이렇다',
