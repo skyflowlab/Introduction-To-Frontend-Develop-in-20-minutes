@@ -160,6 +160,9 @@ code.ic { font-family: var(--mono); font-size: .82em; background: var(--code-bg)
 .cb-label { font: 600 14px var(--mono); color: var(--muted); padding: 6px 14px; border-bottom: 1px solid var(--line); background: var(--bg2); }
 pre.code { margin: 0; padding: 14px 18px; font: 19px/1.5 var(--mono); white-space: pre; overflow: hidden; tab-size: 2; }
 .codeblock.sm pre.code { font-size: 16.5px; line-height: 1.45; padding: 11px 16px; }
+.codeblock.scroll pre.code { font-size: 17.5px; max-height: 190px; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.codeblock.scroll { position: relative; }
+.codeblock.scroll::after { content: '⇵'; position: absolute; right: 10px; top: 6px; color: var(--muted); font-size: 13px; pointer-events: none; }
 .tk-c { color: var(--tk-c); font-style: italic; } .tk-s { color: var(--tk-s); } .tk-k { color: var(--tk-k); }
 .tk-n { color: var(--tk-n); } .tk-f { color: var(--tk-f); } .tk-t { color: var(--tk-t); }
 .tk-a { color: var(--tk-a); } .tk-p { color: var(--tk-p); }

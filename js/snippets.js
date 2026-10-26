@@ -71,7 +71,6 @@ btn.addEventListener('click', () => {
 
   <footer>
     <span id="count"></span>
-    <button id="import" type="button" class="ghost">Import samples</button>
   </footer>
 </main>`;
 
@@ -104,7 +103,6 @@ button {
   color: #fff;
   cursor: pointer;
 }
-button.ghost { background: transparent; color: #5b5bd6; }
 ul { list-style: none; padding: 0; margin: 12px 0; }
 li {
   display: flex;
@@ -161,19 +159,6 @@ $form.addEventListener('submit', (e) => {
   update();
 });
 
-async function importSamples() {
-  try {
-    const res = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=3');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    tasks.push(...data.map((d) => ({ id: Date.now() + d.id, title: d.title, done: d.completed })));
-    update();
-  } catch (err) {
-    $count.textContent = 'Network error: ' + err.message;
-  }
-}
-document.querySelector('#import').onclick = importSamples;
-
 render();`;
 
   /* ---------- excerpts for the step-by-step slides ---------- */
@@ -218,8 +203,8 @@ function save() {
 }
 let tasks = JSON.parse(localStorage.getItem(KEY) || '[]');`;
 
-  S.stepFetch = `// Network: it can fail, so always handle errors
-async function importSamples() {
+  S.stepFetch = `// Network (not in the demo): it can fail, so always handle errors
+async function loadTasks() {
   try {
     const res = await fetch(URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);

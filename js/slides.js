@@ -310,13 +310,13 @@ npm test와 npm start만 run을 생략할 수 있고, 나머지는 npm run build
       part: 3,
       sec: 45,
       title: { ko: '실전 예제: Task board', en: 'A real example: Task board' },
-      notes: `이제 진짜 서비스의 뼈대를 만들어 봅니다. 할 일 보드인데요, 작아 보여도 실제 서비스가 가진 요소가 다 들어 있습니다. 추가, 완료 체크, 삭제, 새로고침해도 남는 저장, 그리고 외부 API에서 데이터 가져오기.
-▶ 여기 미리보기에서 할 일을 추가하고, 체크하고, 새로고침 후에도 남는지 보여주세요. Import samples 버튼은 실제 외부 API를 호출합니다. 네트워크가 안 되면 에러 메시지가 뜨는 것까지가 시연입니다.
-실제 서비스의 뼈대는 네 가지입니다. 상태, 화면, 저장, 통신. 코드를 세 단계로 나눠서 보겠습니다.`,
+      notes: `이제 진짜 서비스의 뼈대를 만들어 봅니다. 할 일 보드인데요, 작아 보여도 실제 서비스가 가진 요소가 다 들어 있습니다. 추가, 완료 체크, 삭제, 그리고 새로고침해도 남는 저장까지 들어 있습니다.
+▶ 여기 미리보기에서 할 일을 추가하고, 체크하고, 지워 보세요. 그리고 코드 탭에서 직접 고쳐도 됩니다. 외부 서버 없이 브라우저 안에서만 동작하므로 네트워크 걱정은 없습니다.
+실제 서비스의 뼈대는 데이터, 화면, 저장, 통신입니다. 이 예제는 앞의 셋을 다루고, 통신은 세 번째 단계에서 코드로만 살펴봅니다. 코드를 세 단계로 나눠서 보겠습니다.`,
       render: ({ t, playground }) => `
         <div class="chips">
           <span class="chip">＋ ${t('추가', 'add')}</span><span class="chip">☑ ${t('완료', 'complete')}</span><span class="chip">✕ ${t('삭제', 'delete')}</span>
-          <span class="chip">💾 ${t('새로고침해도 유지', 'survives reload')}</span><span class="chip">🌐 ${t('외부 API', 'external API')}</span>
+          <span class="chip">💾 ${t('새로고침해도 유지', 'survives reload')}</span>
         </div>
         ${playground({ html: S.taskHtml, css: S.taskCss, js: S.taskJs, edit: ['js', 'html', 'css'], height: 470 })}`,
     },
@@ -370,7 +370,7 @@ CSS에서는 한 가지 요령만 기억하세요. 모양이 바뀌어야 하는
       title: { ko: 'Step 3 — 저장하고 통신하기', en: 'Step 3 — Persist & network' },
       notes: `3단계는 서비스다운 기능입니다. 저장과 통신.
 localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. 객체는 JSON.stringify로 문자열로 바꿔 넣고, 꺼낼 때 JSON.parse로 되돌립니다.
-외부 서버와 통신할 때는 fetch를 씁니다. async, await로 읽기 쉽게 쓰고, 중요한 건 "네트워크는 실패한다"는 전제입니다. res.ok를 확인하고 try-catch로 에러를 처리하세요.
+외부 서버와 통신할 때는 fetch를 씁니다. 이 부분은 데모에는 넣지 않았고 코드로만 보여드립니다. async, await로 읽기 쉽게 쓰고, 중요한 건 "네트워크는 실패한다"는 전제입니다. res.ok를 확인하고 try-catch로 에러를 처리하세요.
 마지막으로 보안 한 가지. 사용자 입력을 innerHTML에 그대로 넣으면 XSS 공격에 노출됩니다. 그래서 우리 코드에서는 textContent를 썼습니다.`,
       render: ({ t, code }) => `
         <div class="cols">
@@ -400,12 +400,12 @@ localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. �
       render: ({ t, code, loop }) => `
         <div class="cols" style="grid-template-columns:1fr 1fr">
           <div class="side">
-            ${code('js', S.cmpVanilla, { size: 'sm', label: t('① Vanilla JS — DOM을 직접 갱신', '① Vanilla JS — update the DOM by hand') })}
+            ${code('js', S.cmpVanilla, { cls: 'scroll', label: t('① Vanilla JS — DOM을 직접 갱신', '① Vanilla JS — update the DOM by hand') })}
             <div class="frag">${loop()}</div>
           </div>
           <div class="side">
-            <div class="frag">${code('jsx', S.cmpReact, { size: 'sm', label: t('② React — state만 바꾸면 화면은 알아서', '② React — change state, the UI follows') })}</div>
-            <div class="frag">${code('svelte', S.cmpSvelte, { size: 'sm', label: t('③ Svelte 5 — 같은 아이디어, 더 짧게', '③ Svelte 5 — same idea, even shorter') })}</div>
+            <div class="frag">${code('jsx', S.cmpReact, { cls: 'scroll', label: t('② React — state만 바꾸면 화면은 알아서', '② React — change state, the UI follows') })}</div>
+            <div class="frag">${code('svelte', S.cmpSvelte, { cls: 'scroll', label: t('③ Svelte 5 — 같은 아이디어, 더 짧게', '③ Svelte 5 — same idea, even shorter') })}</div>
           </div>
         </div>
         <div class="frag banner"><b class="formula">UI = f( state )</b> ${t(

@@ -58,5 +58,5 @@ the frameworks slide (state → render loop, Vanilla/React/Svelte tabs), the cha
 ## Before you present — double-check
 
 - Version strings on slides (`v24.x.x`, `vite ^7`) are illustrative; adjust to what is current.
-- The *Import samples* button calls `jsonplaceholder.typicode.com`; without network it shows the error path (which is also a fine demo).
+- The Task board demo is fully offline (no external API); the `fetch` example on the "Persist & network" slide is code only.
 - Resource links on the last slides — click through once.
