@@ -351,7 +351,7 @@ CSS에서는 한 가지 요령만 기억하세요. 모양이 바뀌어야 하는
 마지막으로 실제 앱은 데이터를 배열 같은 변수에 들고 있으면서 이 DOM 조작을 합니다. 전체 코드는 앞의 데모에 있습니다.
 ▶ 여기서는 프레임워크 이야기를 하지 않고, 순수 JavaScript의 DOM 조작만 설명합니다.`,
       render: ({ t, code }) => `
-        ${code('js', S.stepState, { steps: true })}
+        ${code('js', S.stepState, { steps: true, cls: 'scroll tall' })}
         <div class="frag callout">
           <h4>${t('DOM이 바뀌면 브라우저는…', 'When the DOM changes, the browser…')}</h4>
           <div class="chips">

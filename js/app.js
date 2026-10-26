@@ -97,6 +97,14 @@
 
   function applyStep() {
     frags.forEach((f, k) => f.classList.toggle('on', k < state.step));
+    // keep the newest revealed code chunk visible inside a scrollable block
+    const last = frags[state.step - 1];
+    if (last && last.classList.contains('cf')) {
+      const pre = last.closest('pre');
+      pre.scrollTop = Math.max(0, last.offsetTop + last.offsetHeight - pre.clientHeight + 14);
+    } else {
+      $$('pre.code', deck.children[state.i]).forEach((p) => { if (state.step === 0) p.scrollTop = 0; });
+    }
     sync();
   }
 
