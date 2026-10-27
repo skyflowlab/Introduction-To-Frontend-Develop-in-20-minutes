@@ -264,7 +264,7 @@ pre.code { margin: 0; padding: 14px 18px; font: 19px/1.5 var(--mono); white-spac
 .hint { color: var(--muted); font-size: 16px; margin: 6px 0 0; }
 
 /* roadmap */
-.stops { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.stops { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .stop { background: var(--panel); border: 1px solid var(--line); border-top: 5px solid var(--c); border-radius: 14px; padding: 14px; min-height: 230px; display: flex; flex-direction: column; gap: 6px; }
 .stop b { font: 800 34px var(--mono); color: var(--c); }
 .stop h3 { margin: 0; font-size: 22px; }

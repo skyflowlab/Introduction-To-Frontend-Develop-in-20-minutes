@@ -13,13 +13,14 @@
   'use strict';
 
   const PARTS = [
-    { ko: '시작', en: 'Intro' },
-    { ko: '① 웹의 세 기둥', en: '① The web trio' },
-    { ko: '② Node & npm', en: '② Node & npm' },
-    { ko: '③ 직접 만들기', en: '③ Build it' },
-    { ko: '④ 프레임워크 & React', en: '④ Frameworks & React' },
-    { ko: '⑤ 이제 당신 차례', en: '⑤ Your turn' },
+    { ko: '시작', en: 'Intro', c: 0 },
+    { ko: '① 웹의 세 기둥', en: '① The web trio', c: 1 },
+    { ko: '② 직접 만들기', en: '② Build it', c: 3 },
+    { ko: '③ 프레임워크 & React', en: '③ Frameworks & React', c: 4 },
+    { ko: '④ 이제 당신 차례', en: '④ Your turn', c: 5 },
   ];
+  // Node & npm are appendix-style: they sit inside "Your turn" with their own kicker
+  const SETUP = { ko: '④ 개발 환경 세팅 (부록)', en: '④ Set up your environment (appendix)' };
 
   const SLIDES = [
     /* ===================================================== 0. INTRO */
@@ -54,7 +55,7 @@
       part: 0,
       sec: 20,
       title: { ko: '오늘의 지도', en: "Today's map" },
-      notes: `오늘은 다섯 정거장을 지납니다. 웹의 세 기둥인 HTML, CSS, JavaScript. 그다음 Node와 npm으로 개발 환경을 만들고, 실제 서비스처럼 동작하는 예제를 직접 만들어 봅니다. 이어서 React 같은 프레임워크가 왜 필요한지 보고, 마지막으로 여러분이 직접 만들 차례입니다.
+      notes: `오늘은 네 정거장을 지납니다. 먼저 웹의 기본기인 HTML, CSS, JavaScript를 이해합니다. 그다음 그 기본기만으로 실제 서비스처럼 동작하는 예제를 직접 만들어 봅니다. 기본기를 알아야 프레임워크가 "무엇을 대신해 주는지" 보이기 때문에, 세 번째로 React 같은 프레임워크를 기본기 위에 얹어서 살펴봅니다. 마지막은 여러분이 직접 만들 차례이고, 이때 필요한 개발 환경인 Node와 npm, 배포는 부록처럼 뒤에서 다룹니다.
 목표는 하나입니다. 20분 뒤에 "모르는 게 생겨도 어디서 찾아야 하는지 아는 사람"이 되는 것.`,
       render: ({ t }) => `
         <p class="lead">${t(
@@ -63,10 +64,9 @@
         )}</p>
         <div class="stops">
           <div class="frag stop p1"><b>1</b><h3>${t('웹의 세 기둥', 'The web trio')}</h3><p>HTML · CSS · JavaScript</p><small>≈ 5 min</small></div>
-          <div class="frag stop p2"><b>2</b><h3>Node &amp; npm</h3><p>install · test · build · audit · deploy</p><small>≈ 3 min</small></div>
-          <div class="frag stop p3"><b>3</b><h3>${t('직접 만들기', 'Build it')}</h3><p>Task board — state · storage · fetch</p><small>≈ 3 min</small></div>
-          <div class="frag stop p4"><b>4</b><h3>${t('프레임워크 & React', 'Frameworks & React')}</h3><p>React · Svelte · ${t('핵심 기술 4가지', '4 key techniques')}</p><small>≈ 5 min</small></div>
-          <div class="frag stop p5"><b>5</b><h3>${t('이제 당신 차례', 'Your turn')}</h3><p>${t('나만의 서비스 · 학습 리소스', 'Your own service · resources')}</p><small>≈ 2 min</small></div>
+          <div class="frag stop p3"><b>2</b><h3>${t('직접 만들기', 'Build it')}</h3><p>${t('순수 JS로 Task board — DOM · 저장', 'Task board in plain JS — DOM · storage')}</p><small>≈ 3 min</small></div>
+          <div class="frag stop p4"><b>3</b><h3>${t('프레임워크 & React', 'Frameworks & React')}</h3><p>${t('기본기 위에 얹기 — React · Svelte · 핵심 기술 4가지', 'On top of the basics — React · Svelte · 4 key techniques')}</p><small>≈ 5 min</small></div>
+          <div class="frag stop p5"><b>4</b><h3>${t('이제 당신 차례', 'Your turn')}</h3><p>${t('나만의 서비스 · 개발 환경(Node · npm · 배포) · 리소스', 'Your own service · setup (Node · npm · deploy) · resources')}</p><small>≈ 5 min</small></div>
         </div>
         <p class="frag muted center">${t(
           '이 발표 자체가 <b>정적 웹사이트</b>입니다 — 개발자도구(F12)로 뜯어보세요',
@@ -211,13 +211,258 @@ CSS는 암기 과목이 아닙니다. 모르면 MDN에서 속성 이름을 검�
         )}</div>`,
     },
 
-    /* ===================================================== 2. NODE & NPM */
+    /* ===================================================== 3. BUILD */
     {
-      id: 'node',
+      id: 'task',
       part: 2,
       sec: 45,
+      title: { ko: '실전 예제: Task board', en: 'A real example: Task board' },
+      notes: `이제 진짜 서비스의 뼈대를 만들어 봅니다. 할 일 보드인데요, 작아 보여도 실제 서비스가 가진 요소가 다 들어 있습니다. 추가, 완료 체크, 삭제, 그리고 새로고침해도 남는 저장까지 들어 있습니다.
+▶ 여기 미리보기에서 할 일을 추가하고, 체크하고, 지워 보세요. 그리고 코드 탭에서 직접 고쳐도 됩니다. 외부 서버 없이 브라우저 안에서만 동작하므로 네트워크 걱정은 없습니다.
+실제 서비스의 뼈대는 데이터, 화면, 저장, 통신입니다. 이 예제는 앞의 셋을 다루고, 통신은 세 번째 단계에서 코드로만 살펴봅니다. 코드를 세 단계로 나눠서 보겠습니다.`,
+      render: ({ t, playground }) => `
+        <div class="chips">
+          <span class="chip">＋ ${t('추가', 'add')}</span><span class="chip">☑ ${t('완료', 'complete')}</span><span class="chip">✕ ${t('삭제', 'delete')}</span>
+          <span class="chip">💾 ${t('새로고침해도 유지', 'survives reload')}</span>
+        </div>
+        ${playground({ html: S.taskHtml, css: S.taskCss, js: S.taskJs, edit: ['js', 'html', 'css'], height: 470 })}`,
+    },
+
+    {
+      id: 'step1',
+      part: 2,
+      sec: 45,
+      title: { ko: 'Step 1 — 뼈대 (HTML / CSS)', en: 'Step 1 — Skeleton (HTML / CSS)' },
+      notes: `1단계는 뼈대입니다. HTML에서 중요한 건 id입니다. form, input, ul, span에 id를 달아두면, 나중에 JS가 이 id를 손잡이처럼 잡고 움직입니다.
+CSS에서는 한 가지 요령만 기억하세요. 모양이 바뀌어야 하는 상태, 예를 들어 "완료됨"을 클래스 하나, done으로 표현합니다. 그러면 JS는 스타일을 직접 만지지 않고 클래스만 붙였다 뗍니다. 역할 분리가 깔끔해집니다.`,
+      render: ({ t, code }) => `
+        <div class="cols">
+          <div class="frag">${code('html', S.stepHtml, { label: 'index.html' })}
+            <p class="note">${t('<b>id</b> = JS가 잡을 손잡이', '<b>id</b> = the handle JS grabs')}</p></div>
+          <div class="frag">${code('css', S.stepCss, { label: 'style.css' })}
+            <p class="note">${t('상태 → <b>클래스</b>로 표현. JS는 클래스만 토글', 'State → expressed as a <b>class</b>. JS only toggles it')}</p></div>
+        </div>
+        <div class="frag banner">${t('HTML = <b>있어야 할 것</b> · CSS = <b>상태별 모양</b> · JS = 곧 연결', 'HTML = <b>what exists</b> · CSS = <b>look per state</b> · JS = next')}</div>`,
+    },
+
+    {
+      id: 'step2',
+      part: 2,
+      sec: 50,
+      title: { ko: 'Step 2 — JavaScript로 DOM 바꾸기', en: 'Step 2 — Changing the DOM with JavaScript' },
+      notes: `2단계는 JavaScript가 웹 페이지를 실제로 바꾸는 방법입니다. 핵심은 DOM이에요. 브라우저는 HTML을 DOM이라는 트리 객체로 만들어 두고, JavaScript는 그 객체를 직접 만질 수 있습니다.
+첫째, 찾기. querySelector로 DOM의 원하는 요소를 잡습니다.
+둘째, 바꾸기. createElement로 요소를 만들고, append로 붙이고, textContent로 글자를 바꾸고, classList로 클래스를 넣고 빼고, remove로 지웁니다. 코드가 실행되는 순간 화면이 바뀝니다.
+셋째, 이벤트. 사용자가 제출이나 클릭을 하면 우리가 등록한 함수가 실행되고, 그 안에서 DOM을 바꿉니다. 사용자 동작, 핸들러, DOM 변경. 이 흐름이 웹 인터랙션의 전부입니다.
+아래 그림을 보면, DOM이 바뀔 때마다 브라우저가 스타일을 다시 계산하고, 배치를 잡고, 화면에 다시 그립니다. 그래서 CSS가 .done 클래스만 보고 취소선을 그려 주는 거예요.
+마지막으로 실제 앱은 데이터를 배열 같은 변수에 들고 있으면서 이 DOM 조작을 합니다. 전체 코드는 앞의 데모에 있습니다.
+▶ 여기서는 프레임워크 이야기를 하지 않고, 순수 JavaScript의 DOM 조작만 설명합니다.`,
+      render: ({ t, code }) => `
+        ${code('js', S.stepState, { steps: true, cls: 'scroll tall' })}
+        <div class="frag callout">
+          <h4>${t('DOM이 바뀌면 브라우저는…', 'When the DOM changes, the browser…')}</h4>
+          <div class="chips">
+            <span class="chip">DOM ${t('변경', 'change')}</span><span class="chip">→</span>
+            <span class="chip">Style ${t('다시 계산', 'recalculate')}</span><span class="chip">→</span>
+            <span class="chip">Layout ${t('배치', 'position')}</span><span class="chip">→</span>
+            <span class="chip">Paint ${t('다시 그리기', 'redraw')}</span>
+          </div>
+        </div>`,
+    },
+
+    {
+      id: 'step3',
+      part: 2,
+      sec: 50,
+      title: { ko: 'Step 3 — 저장하고 통신하기', en: 'Step 3 — Persist & network' },
+      notes: `3단계는 서비스다운 기능입니다. 저장과 통신.
+localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. 객체는 JSON.stringify로 문자열로 바꿔 넣고, 꺼낼 때 JSON.parse로 되돌립니다.
+외부 서버와 통신할 때는 fetch를 씁니다. 이 부분은 데모에는 넣지 않았고 코드로만 보여드립니다. async, await로 읽기 쉽게 쓰고, 중요한 건 "네트워크는 실패한다"는 전제입니다. res.ok를 확인하고 try-catch로 에러를 처리하세요.
+마지막으로 보안 한 가지. 사용자 입력을 innerHTML에 그대로 넣으면 XSS 공격에 노출됩니다. 그래서 우리 코드에서는 textContent를 썼습니다.`,
+      render: ({ t, code }) => `
+        <div class="cols">
+          <div>
+            ${code('js', S.stepPersist, { size: 'sm' })}
+            <div style="height:14px"></div>
+            ${code('js', S.stepFetch, { size: 'sm' })}
+          </div>
+          <div class="side">
+            <div class="frag callout"><h4>💾 localStorage</h4><p>${t('문자열만 저장 → <code class="ic">JSON.stringify / parse</code>', 'strings only → <code class="ic">JSON.stringify / parse</code>')}</p></div>
+            <div class="frag callout"><h4>🌐 fetch</h4><p>${t('네트워크는 <b>실패한다</b> — <code class="ic">res.ok</code>와 <code class="ic">try/catch</code>', 'the network <b>fails</b> — check <code class="ic">res.ok</code>, use <code class="ic">try/catch</code>')}</p></div>
+            <div class="frag callout"><h4>🛡 XSS</h4><p>${t('사용자 입력은 <code class="ic">textContent</code>로. <code class="ic">innerHTML</code>은 위험', 'user input → <code class="ic">textContent</code>. <code class="ic">innerHTML</code> is risky')}</p></div>
+          </div>
+        </div>`,
+    },
+
+    /* ===================================================== 4. FRAMEWORKS */
+    {
+      id: 'why-fw',
+      part: 3,
+      sec: 55,
+      title: { ko: '왜 프레임워크인가', en: 'Why frameworks?' },
+      notes: `방금 만든 예제를 다시 떠올려 보세요. 앱이 커질수록 "이 상태가 바뀌면 화면의 어느 부분을 어떻게 고쳐야 하지?"를 우리가 손으로 관리해야 합니다. 이게 점점 지옥이 됩니다.
+프레임워크의 아이디어는 간단합니다. 어떻게 고칠지(how)는 프레임워크에 맡기고, 우리는 state가 이럴 때 화면은 이렇다(what)만 선언합니다.
+▶ 먼저 왼쪽의 Vanilla JS 카운터를 읽어 줍니다. DOM을 직접 고치는 방식이죠. 다음 키를 누르면 state → render → DOM 그림이 나오니 버튼을 눌러 흐름을 보여주세요. 그다음에야 오른쪽에 React, 그리고 Svelte 버전이 차례로 나타납니다. 같은 카운터를 프레임워크는 어떻게 쓰는지 비교해 주세요.
+마지막에 한 줄로 정리합니다. UI는 state의 함수, UI = f(state). 화면은 state가 정하고, state가 바뀌면 화면이 다시 계산됩니다. 이게 React를 비롯한 프레임워크의 핵심 아이디어예요. 문법은 달라도 사상은 같으니, 하나를 깊이 배우면 나머지는 빨리 배웁니다.`,
+      render: ({ t, code, loop }) => `
+        <div class="cols" style="grid-template-columns:1fr 1fr">
+          <div class="side">
+            ${code('js', S.cmpVanilla, { cls: 'scroll', label: t('① Vanilla JS — DOM을 직접 갱신', '① Vanilla JS — update the DOM by hand') })}
+            <div class="frag">${loop()}</div>
+          </div>
+          <div class="side">
+            <div class="frag">${code('jsx', S.cmpReact, { cls: 'scroll', label: t('② React — state만 바꾸면 화면은 알아서', '② React — change state, the UI follows') })}</div>
+            <div class="frag">${code('svelte', S.cmpSvelte, { cls: 'scroll', label: t('③ Svelte 5 — 같은 아이디어, 더 짧게', '③ Svelte 5 — same idea, even shorter') })}</div>
+          </div>
+        </div>
+        <div class="frag banner"><b class="formula">UI = f( state )</b> ${t(
+          '— <b>명령형(how)</b>에서 <b>선언형(what)</b>으로',
+          '— from <b>imperative (how)</b> to <b>declarative (what)</b>'
+        )}</div>`,
+    },
+
+    {
+      id: 'landscape',
+      part: 3,
+      sec: 50,
+      title: { ko: '프레임워크 지도', en: 'The framework landscape' },
+      notes: `생태계가 복잡해 보이지만 층으로 나누면 간단합니다. 가장 아래 런타임과 도구, 그 위에 UI 라이브러리, 그 위에 라우팅과 서버 렌더링을 해주는 메타 프레임워크.
+UI는 React, Vue, Svelte, Solid, Angular. 메타 프레임워크는 Next.js, Nuxt, SvelteKit, Astro 같은 것들이 있습니다.
+최근 흐름도 짚어 봅니다. Svelte 5의 runes와 Solid 같은 signals 기반 반응성, React Compiler와 서버 컴포넌트, 정적 콘텐츠에 강한 Astro의 islands 구조, 그리고 Rolldown, Oxc, Biome 같은 Rust 기반 도구들입니다.
+처음 시작한다면 추천은 React에 Vite, TypeScript 조합입니다. 자료와 일자리, 생태계가 가장 크기 때문이에요. Svelte는 가볍고 배우기 쉬운 훌륭한 대안입니다.`,
+      render: ({ t }) => `
+        <div class="layers">
+          <div class="frag layer"><span class="lname">${t('메타 프레임워크', 'Meta-frameworks')}<small>${t('라우팅 · SSR · 배포', 'routing · SSR · deploy')}</small></span><span class="chips"><i class="chip">Next.js</i><i class="chip">React Router</i><i class="chip">Nuxt</i><i class="chip">SvelteKit</i><i class="chip">Astro</i></span></div>
+          <div class="frag layer"><span class="lname">${t('UI 라이브러리', 'UI libraries')}<small>${t('컴포넌트 · 상태', 'components · state')}</small></span><span class="chips"><i class="chip hot">React</i><i class="chip">Vue</i><i class="chip">Svelte</i><i class="chip">Solid</i><i class="chip">Angular</i></span></div>
+          <div class="frag layer"><span class="lname">${t('도구 · 언어', 'Tooling · language')}<small>${t('빌드 · 검사 · 테스트', 'build · lint · test')}</small></span><span class="chips"><i class="chip">TypeScript</i><i class="chip">Vite</i><i class="chip">Vitest</i><i class="chip">ESLint / Biome</i><i class="chip">Tailwind</i></span></div>
+          <div class="frag layer"><span class="lname">${t('런타임', 'Runtime')}<small>${t('JS 실행 환경', 'where JS runs')}</small></span><span class="chips"><i class="chip">Browser</i><i class="chip">Node.js</i><i class="chip">Deno</i><i class="chip">Bun</i></span></div>
+        </div>
+        <div class="cols">
+          <div class="frag callout"><h4>✨ ${t('요즘 흐름', "What's new")}</h4>
+            <p><i class="chip new">Svelte 5 runes</i> <i class="chip new">Signals</i> <i class="chip new">React Compiler</i> <i class="chip new">Server Components</i> <i class="chip new">Astro islands</i> <i class="chip new">Rust tooling</i></p></div>
+          <div class="frag callout rec"><h4>🧭 ${t('첫 선택', 'Where to start')}</h4>
+            <p><b>React + Vite + TypeScript</b><br><small class="muted">${t('자료 · 일자리 · 생태계 최대 / 가볍게 시작하려면 Svelte', 'largest ecosystem & job market / Svelte for a lighter start')}</small></p></div>
+        </div>`,
+    },
+
+    {
+      id: 'react1',
+      part: 3,
+      sec: 50,
+      title: { ko: 'React ① 컴포넌트 · JSX · props', en: 'React ① Components · JSX · props' },
+      notes: `React 핵심 기술 첫 번째, 컴포넌트입니다. React에서 화면은 레고처럼 조립합니다. 컴포넌트는 그냥 "JSX를 반환하는 함수"예요. 이름은 반드시 대문자로 시작합니다.
+JSX는 JavaScript 안에서 HTML처럼 쓰는 문법입니다. 다만 class는 className으로 쓰고, 중괄호 안에는 자바스크립트 식을 넣을 수 있습니다.
+props는 함수의 인자처럼 부모가 자식에게 넘기는 값이고, 자식은 읽기만 합니다. 기본값도 줄 수 있어요.
+▶ App이 Greeting을 두 번 재사용하는 모습을 보여주세요. 같은 컴포넌트, 다른 props, 다른 결과. 이게 재사용입니다.`,
+      render: ({ t, code }) => `
+        <div class="cols" style="grid-template-columns:7fr 5fr">
+          ${code('jsx', S.react1, { steps: true })}
+          <ul class="bul">
+            <li class="frag"><b>${t('컴포넌트', 'Component')}</b> = ${t('JSX를 반환하는 <b>함수</b> (이름은 대문자)', 'a <b>function</b> returning JSX (Capitalized)')}</li>
+            <li class="frag"><b>JSX</b> = ${t('JS 안의 HTML 같은 문법', 'HTML-like syntax inside JS')}<br><small class="muted"><code class="ic">class → className</code> · <code class="ic">{ }</code> = JS ${t('식', 'expression')}</small></li>
+            <li class="frag"><b>props</b> = ${t('부모 → 자식 <b>읽기 전용</b> 값', 'parent → child <b>read-only</b> values')}</li>
+          </ul>
+        </div>`,
+    },
+
+    {
+      id: 'react2',
+      part: 3,
+      sec: 55,
+      title: { ko: 'React ② state · 리스트 · 불변 업데이트', en: 'React ② State · lists · immutable updates' },
+      notes: `두 번째, state. useState는 "기억하는 변수"를 만듭니다. 값과 그 값을 바꾸는 함수를 한 쌍으로 돌려주고, 바꾸는 함수를 부르면 React가 컴포넌트를 다시 그립니다. 앞에서 본 UI = f(state)가 바로 이 루프예요.
+가장 중요한 규칙은 불변성입니다. 배열을 push로 직접 고치지 말고, 새 배열을 만들어 set 함수에 넘깁니다. 추가는 전개 연산자, 삭제는 filter, 수정은 map을 씁니다. 이 세 패턴만 외우면 됩니다.
+리스트를 그릴 때는 map을 쓰고, 각 항목에 key를 줍니다. key는 인덱스가 아니라 안정적인 id를 쓰세요. 조건부 렌더링은 && 나 삼항 연산자를 씁니다.`,
+      render: ({ t, code }) => `
+        <div class="cols" style="grid-template-columns:7fr 5fr">
+          ${code('jsx', S.react2, { steps: true, size: 'sm' })}
+          <ul class="bul">
+            <li class="frag"><code class="ic">useState</code> = ${t('기억하는 변수. 바꾸면 <b>다시 렌더</b>', 'a remembered variable. Changing it <b>re-renders</b>')}</li>
+            <li class="frag">${t('<b>불변</b>: 직접 고치지 말고 <b>새 값</b>을 만들어 set', '<b>Immutable</b>: never mutate — set a <b>new value</b>')}<br><small class="muted">add <code class="ic">[...a, x]</code> · remove <code class="ic">filter</code> · update <code class="ic">map</code></small></li>
+            <li class="frag">${t('리스트: <code class="ic">map</code> + 안정적인 <code class="ic">key</code> (index ✕)', 'lists: <code class="ic">map</code> + a stable <code class="ic">key</code> (not index)')}<br><small class="muted">${t('조건부: <code class="ic">cond && &lt;X/&gt;</code>', 'conditional: <code class="ic">cond && &lt;X/&gt;</code>')}</small></li>
+          </ul>
+        </div>`,
+    },
+
+    {
+      id: 'react3',
+      part: 3,
+      sec: 55,
+      title: { ko: 'React ③ effect · 파생 값 · 데이터 가져오기', en: 'React ③ Effects · derived values · fetching', },
+      notes: `세 번째, useEffect입니다. 렌더링 밖의 세상, 즉 네트워크나 타이머, 이벤트 구독 같은 외부 시스템과 동기화할 때 씁니다. 두 번째 인자인 의존성 배열이 "언제 다시 실행할지"를 정하고, 반환하는 함수는 정리(cleanup)를 담당합니다.
+여기서 흔한 실수 두 가지를 짚을게요. 하나, 계산할 수 있는 값은 state에 넣지 마세요. 필터링 결과 같은 파생 값은 렌더링 중에 그냥 계산하면 됩니다. 둘, 클릭에 반응하는 일은 effect가 아니라 이벤트 핸들러에서 처리합니다.
+실무에서는 데이터 가져오기를 직접 effect로 쓰기보다 TanStack Query 같은 라이브러리를 쓰는 경우가 많다는 것도 알아두세요. 그리고 두 컴포넌트가 같은 상태를 써야 하면, 가장 가까운 공통 부모로 state를 끌어올립니다. 이걸 lifting state up이라고 합니다.`,
+      render: ({ t, code }) => `
+        <div class="cols" style="grid-template-columns:7fr 5fr">
+          ${code('jsx', S.react3, { steps: true, size: 'sm' })}
+          <ul class="bul">
+            <li class="frag"><code class="ic">useEffect</code> = ${t('<b>외부 시스템</b>과 동기화 (네트워크·타이머·구독)', 'sync with <b>external systems</b> (network, timers, subscriptions)')}<br><small class="muted">deps ${t('배열 = 언제 다시 실행?', 'array = when to re-run?')} · cleanup</small></li>
+            <li class="frag">${t('<b>파생 값</b>은 state가 아니라 <b>계산</b>', '<b>Derived values</b> are <b>computed</b>, not stored')}</li>
+            <li class="frag">${t('상태 공유 = 가까운 공통 부모로 <b>끌어올리기</b>', 'share state = <b>lift it up</b> to the nearest common parent')}<br><small class="muted">${t('서버 데이터는 TanStack Query 같은 도구도', 'for server data, consider TanStack Query')}</small></li>
+          </ul>
+        </div>`,
+    },
+
+    {
+      id: 'react4',
+      part: 3,
+      sec: 40,
+      title: { ko: 'React ④ 커스텀 훅 · 다음 단계', en: 'React ④ Custom hooks · next steps' },
+      notes: `마지막 기술은 커스텀 훅입니다. 앞에서 우리가 localStorage에 저장하던 로직을 use로 시작하는 함수로 묶으면, 어느 컴포넌트에서든 useLocalStorage 한 줄로 재사용할 수 있습니다. 로직을 재사용하는 React의 방식이에요.
+Hooks에는 두 규칙이 있습니다. 컴포넌트나 훅의 최상위에서만 부르고, 조건문이나 반복문 안에서는 부르지 않습니다.
+시작은 npm create vite 명령으로 React 템플릿을 만들면 됩니다. npm이 뭔지는 뒤의 부록에서 설명드립니다.
+Svelte와도 간단히 비교해 볼게요. Svelte는 컴파일러가 변경 지점을 알아내서 필요한 DOM만 직접 갱신하기 때문에 코드가 더 짧습니다. 철학은 같고, 선택은 팀과 취향의 문제입니다.`,
+      render: ({ t, code, terminal }) => `
+        <div class="cols">
+          <div>
+            ${code('jsx', S.react4, { size: 'sm', label: 'useLocalStorage.js' })}
+            <div class="frag callout" style="margin-top:12px"><h4>${t('Hooks 규칙', 'Rules of Hooks')}</h4><p>${t('최상위에서만 호출 · 조건/반복문 안에서 ✕ · 이름은 <code class="ic">use…</code>', 'call at the top level only · never in if/loops · name starts with <code class="ic">use…</code>')}</p></div>
+          </div>
+          <div>
+            <div class="frag">${terminal([{ cmd: 'npm create vite@latest my-app -- --template react-ts' }, { cmd: 'cd my-app && npm install' }, { cmd: 'npm run dev', out: 'Local: http://localhost:5173/' }], { title: 'start' })}</div>
+            <div class="frag callout" style="margin-top:12px"><h4>React vs Svelte</h4>
+              <p>${t('React: 함수를 <b>다시 실행</b>해 비교 · Svelte: 컴파일러가 <b>바뀔 곳만</b> 직접 갱신', 'React: <b>re-runs</b> the function & diffs · Svelte: the compiler updates <b>only what changed</b>')}</p></div>
+          </div>
+        </div>`,
+    },
+
+    /* ===================================================== 5. YOUR TURN */
+    {
+      id: 'challenge',
+      part: 4,
+      sec: 50,
+      title: { ko: '이제 당신 차례', en: 'Your turn' },
+      notes: `이제 여러분 차례입니다. 오늘 배운 걸로 나만의 서비스를 만들어 보세요. 주제가 막막하면 이 주사위를 굴려 보세요.
+▶ 주사위 버튼을 눌러 아이디어를 하나 뽑아 보여주세요.
+규칙은 단순합니다. 첫째, 한 문장으로 정의한다. 둘째, 기능은 세 개만 — 이걸 MVP라고 합니다. 셋째, state를 먼저 설계한다. 넷째, 배포해서 링크를 공유한다. 배포까지 가야 진짜 만든 겁니다.
+완벽하게 만들려 하지 말고, 작게 만들어서 배포하고, 고치면서 키워 가세요.
+그러려면 내 컴퓨터에 개발 환경이 필요합니다. 지금부터 세 장은 부록처럼, 환경을 만드는 방법을 빠르게 훑겠습니다.`,
+      render: ({ t, dice }) => `
+        <div class="cols" style="grid-template-columns:5fr 6fr">
+          <div>
+            ${dice(
+              t(
+                ['날씨 대시보드 (API)', '습관 트래커 (localStorage)', '퀴즈 앱', '북마크 · 레시피 보드', '포모도로 타이머', '가계부 + 차트', '단어 암기 카드', '2048 · 지뢰찾기 같은 미니 게임'],
+                ['Weather dashboard (API)', 'Habit tracker (localStorage)', 'Quiz app', 'Bookmark / recipe board', 'Pomodoro timer', 'Expense tracker + chart', 'Flashcards', 'Mini game: 2048 / Minesweeper']
+              )
+            )}
+          </div>
+          <ol class="steps">
+            <li class="frag"><b>${t('한 문장 정의', 'One sentence')}</b><small>${t('"누가 무엇을 위해 쓰는가"', '"who uses it, and why"')}</small></li>
+            <li class="frag"><b>MVP ${t('기능 3개', '3 features')}</b><small>${t('나머지는 나중에', 'everything else later')}</small></li>
+            <li class="frag"><b>state ${t('먼저 설계', 'first')}</b><small>${t('어떤 데이터가 바뀌는가?', 'what data changes?')}</small></li>
+            <li class="frag"><b>${t('배포 + 링크 공유', 'Deploy + share the link')}</b><small>GitHub Pages</small></li>
+          </ol>
+        </div>`,
+    },
+
+    /* ===================================================== 4b. SETUP (appendix-style: Node & npm) */
+    {
+      id: 'node',
+      part: 4,
+      sec: 45,
       title: { ko: 'Node.js — 브라우저 밖의 JavaScript', en: 'Node.js — JavaScript outside the browser' },
-      notes: `이제 개발 환경입니다. Node.js는 크롬의 JavaScript 엔진을 브라우저 밖으로 꺼낸 실행 환경이에요.
+      notes: `부록의 첫 장, 개발 환경입니다. 앞에서는 브라우저만으로 충분했지만, 프레임워크를 쓰거나 배포하려면 도구가 필요합니다. Node.js는 크롬의 JavaScript 엔진을 브라우저 밖으로 꺼낸 실행 환경이에요.
 프론트엔드 코드는 결국 브라우저에서 돌지만, 우리가 쓰는 개발 도구 — 개발 서버, 번들러, 테스트, 린터 — 는 전부 Node 위에서 돌아갑니다. 그래서 Node는 "도구 실행기"라고 생각하시면 됩니다.
 설치는 nodejs.org에서 LTS 버전을 받으면 됩니다. 여러 버전이 필요하면 nvm이나 fnm 같은 버전 관리자를 쓰세요.
 ▶ 터미널에서 node -v, npm -v가 나오면 준비 끝입니다.`,
@@ -245,7 +490,7 @@ CSS는 암기 과목이 아닙니다. 모르면 MDN에서 속성 이름을 검�
 
     {
       id: 'npm',
-      part: 2,
+      part: 4,
       sec: 60,
       title: { ko: 'npm — 패키지와 프로젝트', en: 'npm — packages & projects' },
       notes: `npm은 남이 만든 코드를 가져다 쓰는 도구입니다. 프로젝트의 시작은 npm init이고, 그러면 package.json이 생깁니다. 이 파일이 프로젝트의 신분증이에요.
@@ -277,7 +522,7 @@ npm install 패키지이름으로 라이브러리를 설치하면 dependencies�
 
     {
       id: 'pipeline',
-      part: 2,
+      part: 4,
       sec: 70,
       title: { ko: 'test · build · audit · deploy', en: 'test · build · audit · deploy' },
       notes: `package.json의 scripts 칸에 명령어를 등록하면 npm run 이름으로 실행할 수 있습니다. 실무에서 가장 자주 만나는 네 가지를 봅시다.
@@ -304,253 +549,9 @@ npm test와 npm start만 run을 생략할 수 있고, 나머지는 npm run build
         )}</p>`,
     },
 
-    /* ===================================================== 3. BUILD */
-    {
-      id: 'task',
-      part: 3,
-      sec: 45,
-      title: { ko: '실전 예제: Task board', en: 'A real example: Task board' },
-      notes: `이제 진짜 서비스의 뼈대를 만들어 봅니다. 할 일 보드인데요, 작아 보여도 실제 서비스가 가진 요소가 다 들어 있습니다. 추가, 완료 체크, 삭제, 그리고 새로고침해도 남는 저장까지 들어 있습니다.
-▶ 여기 미리보기에서 할 일을 추가하고, 체크하고, 지워 보세요. 그리고 코드 탭에서 직접 고쳐도 됩니다. 외부 서버 없이 브라우저 안에서만 동작하므로 네트워크 걱정은 없습니다.
-실제 서비스의 뼈대는 데이터, 화면, 저장, 통신입니다. 이 예제는 앞의 셋을 다루고, 통신은 세 번째 단계에서 코드로만 살펴봅니다. 코드를 세 단계로 나눠서 보겠습니다.`,
-      render: ({ t, playground }) => `
-        <div class="chips">
-          <span class="chip">＋ ${t('추가', 'add')}</span><span class="chip">☑ ${t('완료', 'complete')}</span><span class="chip">✕ ${t('삭제', 'delete')}</span>
-          <span class="chip">💾 ${t('새로고침해도 유지', 'survives reload')}</span>
-        </div>
-        ${playground({ html: S.taskHtml, css: S.taskCss, js: S.taskJs, edit: ['js', 'html', 'css'], height: 470 })}`,
-    },
-
-    {
-      id: 'step1',
-      part: 3,
-      sec: 45,
-      title: { ko: 'Step 1 — 뼈대 (HTML / CSS)', en: 'Step 1 — Skeleton (HTML / CSS)' },
-      notes: `1단계는 뼈대입니다. HTML에서 중요한 건 id입니다. form, input, ul, span에 id를 달아두면, 나중에 JS가 이 id를 손잡이처럼 잡고 움직입니다.
-CSS에서는 한 가지 요령만 기억하세요. 모양이 바뀌어야 하는 상태, 예를 들어 "완료됨"을 클래스 하나, done으로 표현합니다. 그러면 JS는 스타일을 직접 만지지 않고 클래스만 붙였다 뗍니다. 역할 분리가 깔끔해집니다.`,
-      render: ({ t, code }) => `
-        <div class="cols">
-          <div class="frag">${code('html', S.stepHtml, { label: 'index.html' })}
-            <p class="note">${t('<b>id</b> = JS가 잡을 손잡이', '<b>id</b> = the handle JS grabs')}</p></div>
-          <div class="frag">${code('css', S.stepCss, { label: 'style.css' })}
-            <p class="note">${t('상태 → <b>클래스</b>로 표현. JS는 클래스만 토글', 'State → expressed as a <b>class</b>. JS only toggles it')}</p></div>
-        </div>
-        <div class="frag banner">${t('HTML = <b>있어야 할 것</b> · CSS = <b>상태별 모양</b> · JS = 곧 연결', 'HTML = <b>what exists</b> · CSS = <b>look per state</b> · JS = next')}</div>`,
-    },
-
-    {
-      id: 'step2',
-      part: 3,
-      sec: 50,
-      title: { ko: 'Step 2 — JavaScript로 DOM 바꾸기', en: 'Step 2 — Changing the DOM with JavaScript' },
-      notes: `2단계는 JavaScript가 웹 페이지를 실제로 바꾸는 방법입니다. 핵심은 DOM이에요. 브라우저는 HTML을 DOM이라는 트리 객체로 만들어 두고, JavaScript는 그 객체를 직접 만질 수 있습니다.
-첫째, 찾기. querySelector로 DOM의 원하는 요소를 잡습니다.
-둘째, 바꾸기. createElement로 요소를 만들고, append로 붙이고, textContent로 글자를 바꾸고, classList로 클래스를 넣고 빼고, remove로 지웁니다. 코드가 실행되는 순간 화면이 바뀝니다.
-셋째, 이벤트. 사용자가 제출이나 클릭을 하면 우리가 등록한 함수가 실행되고, 그 안에서 DOM을 바꿉니다. 사용자 동작, 핸들러, DOM 변경. 이 흐름이 웹 인터랙션의 전부입니다.
-아래 그림을 보면, DOM이 바뀔 때마다 브라우저가 스타일을 다시 계산하고, 배치를 잡고, 화면에 다시 그립니다. 그래서 CSS가 .done 클래스만 보고 취소선을 그려 주는 거예요.
-마지막으로 실제 앱은 데이터를 배열 같은 변수에 들고 있으면서 이 DOM 조작을 합니다. 전체 코드는 앞의 데모에 있습니다.
-▶ 여기서는 프레임워크 이야기를 하지 않고, 순수 JavaScript의 DOM 조작만 설명합니다.`,
-      render: ({ t, code }) => `
-        ${code('js', S.stepState, { steps: true, cls: 'scroll tall' })}
-        <div class="frag callout">
-          <h4>${t('DOM이 바뀌면 브라우저는…', 'When the DOM changes, the browser…')}</h4>
-          <div class="chips">
-            <span class="chip">DOM ${t('변경', 'change')}</span><span class="chip">→</span>
-            <span class="chip">Style ${t('다시 계산', 'recalculate')}</span><span class="chip">→</span>
-            <span class="chip">Layout ${t('배치', 'position')}</span><span class="chip">→</span>
-            <span class="chip">Paint ${t('다시 그리기', 'redraw')}</span>
-          </div>
-        </div>`,
-    },
-
-    {
-      id: 'step3',
-      part: 3,
-      sec: 50,
-      title: { ko: 'Step 3 — 저장하고 통신하기', en: 'Step 3 — Persist & network' },
-      notes: `3단계는 서비스다운 기능입니다. 저장과 통신.
-localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. 객체는 JSON.stringify로 문자열로 바꿔 넣고, 꺼낼 때 JSON.parse로 되돌립니다.
-외부 서버와 통신할 때는 fetch를 씁니다. 이 부분은 데모에는 넣지 않았고 코드로만 보여드립니다. async, await로 읽기 쉽게 쓰고, 중요한 건 "네트워크는 실패한다"는 전제입니다. res.ok를 확인하고 try-catch로 에러를 처리하세요.
-마지막으로 보안 한 가지. 사용자 입력을 innerHTML에 그대로 넣으면 XSS 공격에 노출됩니다. 그래서 우리 코드에서는 textContent를 썼습니다.`,
-      render: ({ t, code }) => `
-        <div class="cols">
-          <div>
-            ${code('js', S.stepPersist, { size: 'sm' })}
-            <div style="height:14px"></div>
-            ${code('js', S.stepFetch, { size: 'sm' })}
-          </div>
-          <div class="side">
-            <div class="frag callout"><h4>💾 localStorage</h4><p>${t('문자열만 저장 → <code class="ic">JSON.stringify / parse</code>', 'strings only → <code class="ic">JSON.stringify / parse</code>')}</p></div>
-            <div class="frag callout"><h4>🌐 fetch</h4><p>${t('네트워크는 <b>실패한다</b> — <code class="ic">res.ok</code>와 <code class="ic">try/catch</code>', 'the network <b>fails</b> — check <code class="ic">res.ok</code>, use <code class="ic">try/catch</code>')}</p></div>
-            <div class="frag callout"><h4>🛡 XSS</h4><p>${t('사용자 입력은 <code class="ic">textContent</code>로. <code class="ic">innerHTML</code>은 위험', 'user input → <code class="ic">textContent</code>. <code class="ic">innerHTML</code> is risky')}</p></div>
-          </div>
-        </div>`,
-    },
-
-    /* ===================================================== 4. FRAMEWORKS */
-    {
-      id: 'why-fw',
-      part: 4,
-      sec: 55,
-      title: { ko: '왜 프레임워크인가', en: 'Why frameworks?' },
-      notes: `방금 만든 예제를 다시 떠올려 보세요. 앱이 커질수록 "이 상태가 바뀌면 화면의 어느 부분을 어떻게 고쳐야 하지?"를 우리가 손으로 관리해야 합니다. 이게 점점 지옥이 됩니다.
-프레임워크의 아이디어는 간단합니다. 어떻게 고칠지(how)는 프레임워크에 맡기고, 우리는 state가 이럴 때 화면은 이렇다(what)만 선언합니다.
-▶ 먼저 왼쪽의 Vanilla JS 카운터를 읽어 줍니다. DOM을 직접 고치는 방식이죠. 다음 키를 누르면 state → render → DOM 그림이 나오니 버튼을 눌러 흐름을 보여주세요. 그다음에야 오른쪽에 React, 그리고 Svelte 버전이 차례로 나타납니다. 같은 카운터를 프레임워크는 어떻게 쓰는지 비교해 주세요.
-마지막에 한 줄로 정리합니다. UI는 state의 함수, UI = f(state). 화면은 state가 정하고, state가 바뀌면 화면이 다시 계산됩니다. 이게 React를 비롯한 프레임워크의 핵심 아이디어예요. 문법은 달라도 사상은 같으니, 하나를 깊이 배우면 나머지는 빨리 배웁니다.`,
-      render: ({ t, code, loop }) => `
-        <div class="cols" style="grid-template-columns:1fr 1fr">
-          <div class="side">
-            ${code('js', S.cmpVanilla, { cls: 'scroll', label: t('① Vanilla JS — DOM을 직접 갱신', '① Vanilla JS — update the DOM by hand') })}
-            <div class="frag">${loop()}</div>
-          </div>
-          <div class="side">
-            <div class="frag">${code('jsx', S.cmpReact, { cls: 'scroll', label: t('② React — state만 바꾸면 화면은 알아서', '② React — change state, the UI follows') })}</div>
-            <div class="frag">${code('svelte', S.cmpSvelte, { cls: 'scroll', label: t('③ Svelte 5 — 같은 아이디어, 더 짧게', '③ Svelte 5 — same idea, even shorter') })}</div>
-          </div>
-        </div>
-        <div class="frag banner"><b class="formula">UI = f( state )</b> ${t(
-          '— <b>명령형(how)</b>에서 <b>선언형(what)</b>으로',
-          '— from <b>imperative (how)</b> to <b>declarative (what)</b>'
-        )}</div>`,
-    },
-
-    {
-      id: 'landscape',
-      part: 4,
-      sec: 50,
-      title: { ko: '프레임워크 지도', en: 'The framework landscape' },
-      notes: `생태계가 복잡해 보이지만 층으로 나누면 간단합니다. 가장 아래 런타임과 도구, 그 위에 UI 라이브러리, 그 위에 라우팅과 서버 렌더링을 해주는 메타 프레임워크.
-UI는 React, Vue, Svelte, Solid, Angular. 메타 프레임워크는 Next.js, Nuxt, SvelteKit, Astro 같은 것들이 있습니다.
-최근 흐름도 짚어 봅니다. Svelte 5의 runes와 Solid 같은 signals 기반 반응성, React Compiler와 서버 컴포넌트, 정적 콘텐츠에 강한 Astro의 islands 구조, 그리고 Rolldown, Oxc, Biome 같은 Rust 기반 도구들입니다.
-처음 시작한다면 추천은 React에 Vite, TypeScript 조합입니다. 자료와 일자리, 생태계가 가장 크기 때문이에요. Svelte는 가볍고 배우기 쉬운 훌륭한 대안입니다.`,
-      render: ({ t }) => `
-        <div class="layers">
-          <div class="frag layer"><span class="lname">${t('메타 프레임워크', 'Meta-frameworks')}<small>${t('라우팅 · SSR · 배포', 'routing · SSR · deploy')}</small></span><span class="chips"><i class="chip">Next.js</i><i class="chip">React Router</i><i class="chip">Nuxt</i><i class="chip">SvelteKit</i><i class="chip">Astro</i></span></div>
-          <div class="frag layer"><span class="lname">${t('UI 라이브러리', 'UI libraries')}<small>${t('컴포넌트 · 상태', 'components · state')}</small></span><span class="chips"><i class="chip hot">React</i><i class="chip">Vue</i><i class="chip">Svelte</i><i class="chip">Solid</i><i class="chip">Angular</i></span></div>
-          <div class="frag layer"><span class="lname">${t('도구 · 언어', 'Tooling · language')}<small>${t('빌드 · 검사 · 테스트', 'build · lint · test')}</small></span><span class="chips"><i class="chip">TypeScript</i><i class="chip">Vite</i><i class="chip">Vitest</i><i class="chip">ESLint / Biome</i><i class="chip">Tailwind</i></span></div>
-          <div class="frag layer"><span class="lname">${t('런타임', 'Runtime')}<small>${t('JS 실행 환경', 'where JS runs')}</small></span><span class="chips"><i class="chip">Browser</i><i class="chip">Node.js</i><i class="chip">Deno</i><i class="chip">Bun</i></span></div>
-        </div>
-        <div class="cols">
-          <div class="frag callout"><h4>✨ ${t('요즘 흐름', "What's new")}</h4>
-            <p><i class="chip new">Svelte 5 runes</i> <i class="chip new">Signals</i> <i class="chip new">React Compiler</i> <i class="chip new">Server Components</i> <i class="chip new">Astro islands</i> <i class="chip new">Rust tooling</i></p></div>
-          <div class="frag callout rec"><h4>🧭 ${t('첫 선택', 'Where to start')}</h4>
-            <p><b>React + Vite + TypeScript</b><br><small class="muted">${t('자료 · 일자리 · 생태계 최대 / 가볍게 시작하려면 Svelte', 'largest ecosystem & job market / Svelte for a lighter start')}</small></p></div>
-        </div>`,
-    },
-
-    {
-      id: 'react1',
-      part: 4,
-      sec: 50,
-      title: { ko: 'React ① 컴포넌트 · JSX · props', en: 'React ① Components · JSX · props' },
-      notes: `React 핵심 기술 첫 번째, 컴포넌트입니다. React에서 화면은 레고처럼 조립합니다. 컴포넌트는 그냥 "JSX를 반환하는 함수"예요. 이름은 반드시 대문자로 시작합니다.
-JSX는 JavaScript 안에서 HTML처럼 쓰는 문법입니다. 다만 class는 className으로 쓰고, 중괄호 안에는 자바스크립트 식을 넣을 수 있습니다.
-props는 함수의 인자처럼 부모가 자식에게 넘기는 값이고, 자식은 읽기만 합니다. 기본값도 줄 수 있어요.
-▶ App이 Greeting을 두 번 재사용하는 모습을 보여주세요. 같은 컴포넌트, 다른 props, 다른 결과. 이게 재사용입니다.`,
-      render: ({ t, code }) => `
-        <div class="cols" style="grid-template-columns:7fr 5fr">
-          ${code('jsx', S.react1, { steps: true })}
-          <ul class="bul">
-            <li class="frag"><b>${t('컴포넌트', 'Component')}</b> = ${t('JSX를 반환하는 <b>함수</b> (이름은 대문자)', 'a <b>function</b> returning JSX (Capitalized)')}</li>
-            <li class="frag"><b>JSX</b> = ${t('JS 안의 HTML 같은 문법', 'HTML-like syntax inside JS')}<br><small class="muted"><code class="ic">class → className</code> · <code class="ic">{ }</code> = JS ${t('식', 'expression')}</small></li>
-            <li class="frag"><b>props</b> = ${t('부모 → 자식 <b>읽기 전용</b> 값', 'parent → child <b>read-only</b> values')}</li>
-          </ul>
-        </div>`,
-    },
-
-    {
-      id: 'react2',
-      part: 4,
-      sec: 55,
-      title: { ko: 'React ② state · 리스트 · 불변 업데이트', en: 'React ② State · lists · immutable updates' },
-      notes: `두 번째, state. useState는 "기억하는 변수"를 만듭니다. 값과 그 값을 바꾸는 함수를 한 쌍으로 돌려주고, 바꾸는 함수를 부르면 React가 컴포넌트를 다시 그립니다. 앞에서 본 UI = f(state)가 바로 이 루프예요.
-가장 중요한 규칙은 불변성입니다. 배열을 push로 직접 고치지 말고, 새 배열을 만들어 set 함수에 넘깁니다. 추가는 전개 연산자, 삭제는 filter, 수정은 map을 씁니다. 이 세 패턴만 외우면 됩니다.
-리스트를 그릴 때는 map을 쓰고, 각 항목에 key를 줍니다. key는 인덱스가 아니라 안정적인 id를 쓰세요. 조건부 렌더링은 && 나 삼항 연산자를 씁니다.`,
-      render: ({ t, code }) => `
-        <div class="cols" style="grid-template-columns:7fr 5fr">
-          ${code('jsx', S.react2, { steps: true, size: 'sm' })}
-          <ul class="bul">
-            <li class="frag"><code class="ic">useState</code> = ${t('기억하는 변수. 바꾸면 <b>다시 렌더</b>', 'a remembered variable. Changing it <b>re-renders</b>')}</li>
-            <li class="frag">${t('<b>불변</b>: 직접 고치지 말고 <b>새 값</b>을 만들어 set', '<b>Immutable</b>: never mutate — set a <b>new value</b>')}<br><small class="muted">add <code class="ic">[...a, x]</code> · remove <code class="ic">filter</code> · update <code class="ic">map</code></small></li>
-            <li class="frag">${t('리스트: <code class="ic">map</code> + 안정적인 <code class="ic">key</code> (index ✕)', 'lists: <code class="ic">map</code> + a stable <code class="ic">key</code> (not index)')}<br><small class="muted">${t('조건부: <code class="ic">cond && &lt;X/&gt;</code>', 'conditional: <code class="ic">cond && &lt;X/&gt;</code>')}</small></li>
-          </ul>
-        </div>`,
-    },
-
-    {
-      id: 'react3',
-      part: 4,
-      sec: 55,
-      title: { ko: 'React ③ effect · 파생 값 · 데이터 가져오기', en: 'React ③ Effects · derived values · fetching', },
-      notes: `세 번째, useEffect입니다. 렌더링 밖의 세상, 즉 네트워크나 타이머, 이벤트 구독 같은 외부 시스템과 동기화할 때 씁니다. 두 번째 인자인 의존성 배열이 "언제 다시 실행할지"를 정하고, 반환하는 함수는 정리(cleanup)를 담당합니다.
-여기서 흔한 실수 두 가지를 짚을게요. 하나, 계산할 수 있는 값은 state에 넣지 마세요. 필터링 결과 같은 파생 값은 렌더링 중에 그냥 계산하면 됩니다. 둘, 클릭에 반응하는 일은 effect가 아니라 이벤트 핸들러에서 처리합니다.
-실무에서는 데이터 가져오기를 직접 effect로 쓰기보다 TanStack Query 같은 라이브러리를 쓰는 경우가 많다는 것도 알아두세요. 그리고 두 컴포넌트가 같은 상태를 써야 하면, 가장 가까운 공통 부모로 state를 끌어올립니다. 이걸 lifting state up이라고 합니다.`,
-      render: ({ t, code }) => `
-        <div class="cols" style="grid-template-columns:7fr 5fr">
-          ${code('jsx', S.react3, { steps: true, size: 'sm' })}
-          <ul class="bul">
-            <li class="frag"><code class="ic">useEffect</code> = ${t('<b>외부 시스템</b>과 동기화 (네트워크·타이머·구독)', 'sync with <b>external systems</b> (network, timers, subscriptions)')}<br><small class="muted">deps ${t('배열 = 언제 다시 실행?', 'array = when to re-run?')} · cleanup</small></li>
-            <li class="frag">${t('<b>파생 값</b>은 state가 아니라 <b>계산</b>', '<b>Derived values</b> are <b>computed</b>, not stored')}</li>
-            <li class="frag">${t('상태 공유 = 가까운 공통 부모로 <b>끌어올리기</b>', 'share state = <b>lift it up</b> to the nearest common parent')}<br><small class="muted">${t('서버 데이터는 TanStack Query 같은 도구도', 'for server data, consider TanStack Query')}</small></li>
-          </ul>
-        </div>`,
-    },
-
-    {
-      id: 'react4',
-      part: 4,
-      sec: 40,
-      title: { ko: 'React ④ 커스텀 훅 · 다음 단계', en: 'React ④ Custom hooks · next steps' },
-      notes: `마지막 기술은 커스텀 훅입니다. 앞에서 우리가 localStorage에 저장하던 로직을 use로 시작하는 함수로 묶으면, 어느 컴포넌트에서든 useLocalStorage 한 줄로 재사용할 수 있습니다. 로직을 재사용하는 React의 방식이에요.
-Hooks에는 두 규칙이 있습니다. 컴포넌트나 훅의 최상위에서만 부르고, 조건문이나 반복문 안에서는 부르지 않습니다.
-시작은 npm create vite 명령으로 React 템플릿을 만들면 됩니다.
-Svelte와도 간단히 비교해 볼게요. Svelte는 컴파일러가 변경 지점을 알아내서 필요한 DOM만 직접 갱신하기 때문에 코드가 더 짧습니다. 철학은 같고, 선택은 팀과 취향의 문제입니다.`,
-      render: ({ t, code, terminal }) => `
-        <div class="cols">
-          <div>
-            ${code('jsx', S.react4, { size: 'sm', label: 'useLocalStorage.js' })}
-            <div class="frag callout" style="margin-top:12px"><h4>${t('Hooks 규칙', 'Rules of Hooks')}</h4><p>${t('최상위에서만 호출 · 조건/반복문 안에서 ✕ · 이름은 <code class="ic">use…</code>', 'call at the top level only · never in if/loops · name starts with <code class="ic">use…</code>')}</p></div>
-          </div>
-          <div>
-            <div class="frag">${terminal([{ cmd: 'npm create vite@latest my-app -- --template react-ts' }, { cmd: 'cd my-app && npm install' }, { cmd: 'npm run dev', out: 'Local: http://localhost:5173/' }], { title: 'start' })}</div>
-            <div class="frag callout" style="margin-top:12px"><h4>React vs Svelte</h4>
-              <p>${t('React: 함수를 <b>다시 실행</b>해 비교 · Svelte: 컴파일러가 <b>바뀔 곳만</b> 직접 갱신', 'React: <b>re-runs</b> the function & diffs · Svelte: the compiler updates <b>only what changed</b>')}</p></div>
-          </div>
-        </div>`,
-    },
-
-    /* ===================================================== 5. YOUR TURN */
-    {
-      id: 'challenge',
-      part: 5,
-      sec: 50,
-      title: { ko: '이제 당신 차례', en: 'Your turn' },
-      notes: `이제 여러분 차례입니다. 오늘 배운 걸로 나만의 서비스를 만들어 보세요. 주제가 막막하면 이 주사위를 굴려 보세요.
-▶ 주사위 버튼을 눌러 아이디어를 하나 뽑아 보여주세요.
-규칙은 단순합니다. 첫째, 한 문장으로 정의한다. 둘째, 기능은 세 개만 — 이걸 MVP라고 합니다. 셋째, state를 먼저 설계한다. 넷째, 배포해서 링크를 공유한다. 배포까지 가야 진짜 만든 겁니다.
-완벽하게 만들려 하지 말고, 작게 만들어서 배포하고, 고치면서 키워 가세요.`,
-      render: ({ t, dice }) => `
-        <div class="cols" style="grid-template-columns:5fr 6fr">
-          <div>
-            ${dice(
-              t(
-                ['날씨 대시보드 (API)', '습관 트래커 (localStorage)', '퀴즈 앱', '북마크 · 레시피 보드', '포모도로 타이머', '가계부 + 차트', '단어 암기 카드', '2048 · 지뢰찾기 같은 미니 게임'],
-                ['Weather dashboard (API)', 'Habit tracker (localStorage)', 'Quiz app', 'Bookmark / recipe board', 'Pomodoro timer', 'Expense tracker + chart', 'Flashcards', 'Mini game: 2048 / Minesweeper']
-              )
-            )}
-          </div>
-          <ol class="steps">
-            <li class="frag"><b>${t('한 문장 정의', 'One sentence')}</b><small>${t('"누가 무엇을 위해 쓰는가"', '"who uses it, and why"')}</small></li>
-            <li class="frag"><b>MVP ${t('기능 3개', '3 features')}</b><small>${t('나머지는 나중에', 'everything else later')}</small></li>
-            <li class="frag"><b>state ${t('먼저 설계', 'first')}</b><small>${t('어떤 데이터가 바뀌는가?', 'what data changes?')}</small></li>
-            <li class="frag"><b>${t('배포 + 링크 공유', 'Deploy + share the link')}</b><small>GitHub Pages</small></li>
-          </ol>
-        </div>`,
-    },
-
     {
       id: 'resources',
-      part: 5,
+      part: 4,
       sec: 60,
       title: { ko: '더 배우고 싶다면', en: 'Keep learning' },
       notes: `마지막으로 어디서 더 배울지입니다. 세 단계로 정리했어요.
@@ -588,7 +589,7 @@ Svelte와도 간단히 비교해 볼게요. Svelte는 컴파일러가 변경 지
 
     {
       id: 'closing',
-      part: 5,
+      part: 4,
       sec: 25,
       layout: 'center',
       title: { ko: '정리', en: 'Wrap-up' },
@@ -609,6 +610,10 @@ Svelte와도 간단히 비교해 볼게요. Svelte는 컴파일러가 변경 지
         </div>`,
     },
   ];
+
+  SLIDES.forEach((s) => {
+    if (['node', 'npm', 'pipeline'].includes(s.id)) s.kicker = SETUP;
+  });
 
   return { PARTS, SLIDES };
 });

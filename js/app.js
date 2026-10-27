@@ -59,13 +59,13 @@
       const el = document.createElement('section');
       el.className = 'slide' + (s.layout ? ' ' + s.layout : '');
       el.dataset.id = s.id;
-      const head = s.layout === 'center' ? '' : `<header class="s-head"><span class="kicker" style="--c:var(--p${s.part})">${B.esc(PARTS[s.part][state.lang])}</span><h2>${B.esc(s.title[state.lang])}</h2></header>`;
+      const head = s.layout === 'center' ? '' : `<header class="s-head"><span class="kicker" style="--c:var(--p${PARTS[s.part].c})">${B.esc((s.kicker || PARTS[s.part])[state.lang])}</span><h2>${B.esc(s.title[state.lang])}</h2></header>`;
       el.innerHTML = `${head}<div class="s-body">${s.render(h)}</div>`;
       el.setAttribute('aria-label', `${idx + 1}. ${s.title[state.lang]}`);
       deck.append(el);
     });
     document.documentElement.lang = state.lang;
-    $('#progress').innerHTML = SLIDES.map((s) => `<i style="background:var(--p${s.part})"></i>`).join('');
+    $('#progress').innerHTML = SLIDES.map((s) => `<i style="background:var(--p${PARTS[s.part].c})"></i>`).join('');
   }
 
   function setLang(lang) {
@@ -315,7 +315,7 @@
   function openOverview() {
     const ov = $('#overview');
     ov.innerHTML = `<h3>${UI[state.lang].ov}</h3><div class="grid">${SLIDES.map(
-      (s, k) => `<button class="ov ${k === state.i ? 'cur' : ''}" data-i="${k}" style="--c:var(--p${s.part})"><small>${k + 1} · ${B.esc(PARTS[s.part][state.lang])}</small><b>${B.esc(s.title[state.lang])}</b><small>${s.sec}s</small></button>`
+      (s, k) => `<button class="ov ${k === state.i ? 'cur' : ''}" data-i="${k}" style="--c:var(--p${PARTS[s.part].c})"><small>${k + 1} · ${B.esc((s.kicker || PARTS[s.part])[state.lang])}</small><b>${B.esc(s.title[state.lang])}</b><small>${s.sec}s</small></button>`
     ).join('')}</div>`;
     ov.classList.add('open');
   }

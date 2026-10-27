@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { PARTS, SLIDES } = require('../js/slides.js');
 
+const sec = (s) => (s.kicker || PARTS[s.part]).ko;
 const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 const total = SLIDES.reduce((a, s) => a + s.sec, 0);
 
@@ -20,15 +21,15 @@ out.push('> 발표는 한국어로 진행하고 기술 용어는 영어 그대�
 out.push(`**계획 시간 ${fmt(total)} / 20:00** (여유 ${fmt(1200 - total)} — 질문·전환·데모 지연용)`, '');
 out.push('| # | 시간 | 구간 | 슬라이드 |', '|---|------|------|----------|');
 rows.forEach(({ s, i, from, to }) =>
-  out.push(`| ${i + 1} | ${fmt(from)}–${fmt(to)} | ${PARTS[s.part].ko} | ${s.title.ko} |`)
+  out.push(`| ${i + 1} | ${fmt(from)}–${fmt(to)} | ${sec(s)} | ${s.title.ko} |`)
 );
 out.push('');
 
-let lastPart = -1;
+let lastPart = '';
 rows.forEach(({ s, i, from, to }) => {
-  if (s.part !== lastPart) {
-    out.push(`## ${PARTS[s.part].ko}`, '');
-    lastPart = s.part;
+  if (sec(s) !== lastPart) {
+    out.push(`## ${sec(s)}`, '');
+    lastPart = sec(s);
   }
   out.push(`### ${i + 1}. ${s.title.ko} · \`${fmt(from)}–${fmt(to)}\` (${s.sec}초)`, '');
   out.push(s.notes.split('\n').map((l) => (l.startsWith('▶') ? `> ${l}` : l)).join('\n\n'), '');

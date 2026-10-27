@@ -13,10 +13,9 @@ The deck is itself a static website: no build step, no dependencies, so it runs 
 ## Flow
 
 1. **웹의 세 기둥** — how a browser shows a page, HTML (hover code ↔ element), CSS and JS (live editors), how they connect
-2. **Node & npm** — install, `package.json`, `test` / `build` / `audit` / `deploy`, GitHub Pages `base` pitfall
-3. **직접 만들기** — a real *Task board* (state → render, localStorage, fetch) running live in the slide
-4. **프레임워크 & React** — why frameworks, the landscape (React, Svelte, …), 4 essential React techniques
-5. **이제 당신 차례** — project ideas (dice), learning resources (MDN, javascript.info, react.dev, …)
+2. **직접 만들기** — a real *Task board* in plain JavaScript (DOM, localStorage) running live in the slide
+3. **프레임워크 & React** — built on top of those fundamentals: why frameworks, the landscape (React, Svelte, …), 4 essential React techniques
+4. **이제 당신 차례** — project ideas (dice), then an appendix-style setup block (Node, npm, `test` / `build` / `audit` / `deploy`, GitHub Pages `base` pitfall), learning resources, wrap-up
 
 ## Run
 
