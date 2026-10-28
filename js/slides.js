@@ -481,7 +481,7 @@ Svelte와도 간단히 비교해 볼게요. Svelte는 컴파일러가 변경 지
     {
       id: 'node',
       part: 4,
-      sec: 45,
+      sec: 40,
       title: { ko: 'Node.js — 브라우저 밖의 JavaScript', en: 'Node.js — JavaScript outside the browser' },
       notes: `부록의 첫 장, 개발 환경입니다. 앞에서는 브라우저만으로 충분했지만, 프레임워크를 쓰거나 배포하려면 도구가 필요합니다. Node.js는 크롬의 JavaScript 엔진을 브라우저 밖으로 꺼낸 실행 환경이에요.
 프론트엔드 코드는 결국 브라우저에서 돌지만, 우리가 쓰는 개발 도구 — 개발 서버, 번들러, 테스트, 린터 — 는 전부 Node 위에서 돌아갑니다. 그래서 Node는 "도구 실행기"라고 생각하시면 됩니다.
@@ -542,6 +542,36 @@ npm install 패키지이름으로 라이브러리를 설치하면 dependencies�
     },
 
     {
+      id: 'vite',
+      part: 4,
+      sec: 40,
+      title: { ko: 'Vite — 명령 한 줄로 프로젝트 시작', en: 'Vite — a project in one command' },
+      notes: `이제 npm을 알았으니, 프로젝트를 처음부터 손으로 세팅할 필요 없이 명령 한 줄로 시작하는 방법입니다. npm create vite@latest 입니다.
+▶ 이 명령을 실행하면 프로젝트 이름과 프레임워크를 묻습니다. React, Svelte, Vue, 그리고 Vanilla, 오늘 배운 순수 JavaScript도 고를 수 있고, TypeScript 변형도 고를 수 있어요. 이름 뒤에 두 줄 하이픈과 template 옵션을 붙이면 질문 없이 한 번에 만들 수도 있습니다.
+그다음 cd로 들어가서 npm install, npm run dev. 개발 서버가 뜨고, 파일을 저장하면 브라우저가 바로 갱신됩니다. 이걸 HMR이라고 합니다.
+오른쪽 폴더 구조를 보세요. index.html이 시작점이고, src 안에 우리 코드가, package.json에는 앞에서 본 scripts가 이미 들어 있습니다. 이제 다음 장에서 이 scripts의 test, build, audit, deploy를 봅니다.`,
+      render: ({ t, terminal, code, ic }) => `
+        <div class="cols" style="grid-template-columns:6fr 5fr">
+          <div>
+            ${terminal(
+              [
+                { cmd: 'npm create vite@latest my-app', out: '? Framework: Vanilla · React · Svelte …\n? Variant:   JavaScript · TypeScript' },
+                { cmd: 'cd my-app' },
+                { cmd: 'npm install' },
+                { cmd: 'npm run dev', out: 'Local:   http://localhost:5173/' },
+              ],
+              { title: 'start' }
+            )}
+            <p class="frag note">${t('질문 없이 한 번에:', 'Skip the prompts:')} ${ic('npm create vite@latest my-app -- --template react-ts')}</p>
+          </div>
+          <div>
+            <div class="frag">${code('txt', S.viteTree, { size: 'sm', label: 'my-app/' })}</div>
+            <div class="frag callout" style="margin-top:12px"><h4>⚡ HMR</h4><p>${t('저장하면 브라우저에 <b>즉시 반영</b> · 빌드는 <code class="ic">npm run build</code> → <code class="ic">dist/</code>', 'save and the browser <b>updates instantly</b> · build with <code class="ic">npm run build</code> → <code class="ic">dist/</code>')}</p></div>
+          </div>
+        </div>`,
+    },
+
+    {
       id: 'pipeline',
       part: 4,
       sec: 70,
@@ -573,7 +603,7 @@ npm test와 npm start만 run을 생략할 수 있고, 나머지는 npm run build
     {
       id: 'resources',
       part: 4,
-      sec: 60,
+      sec: 50,
       title: { ko: '더 배우고 싶다면', en: 'Keep learning' },
       notes: `마지막으로 어디서 더 배울지입니다. 세 단계로 정리했어요.
 레벨 1, 기초 다지기. MDN Web Docs는 웹 표준 공식 사전급 문서고 한국어판도 있습니다. javascript.info 는 JS를 처음부터 깊게 다루는 튜토리얼이고, web.dev의 Learn 코스도 훌륭합니다.
@@ -633,7 +663,7 @@ npm test와 npm start만 run을 생략할 수 있고, 나머지는 npm run build
   ];
 
   SLIDES.forEach((s) => {
-    if (['node', 'npm', 'pipeline'].includes(s.id)) s.kicker = SETUP;
+    if (['node', 'npm', 'vite', 'pipeline'].includes(s.id)) s.kicker = SETUP;
   });
 
   return { PARTS, SLIDES };

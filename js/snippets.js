@@ -343,6 +343,14 @@ export default function App() {
   }
 }`;
 
+  S.viteTree = `index.html      <- entry
+package.json    <- scripts
+vite.config.js
+public/         <- static files
+src/
+  main.jsx      <- JS entry
+  App.jsx       <- your code`;
+
   S.npmScripts = `"scripts": {
   "dev": "vite",
   "test": "vitest run",

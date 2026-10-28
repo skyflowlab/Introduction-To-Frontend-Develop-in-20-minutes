@@ -8,14 +8,14 @@ The deck is itself a static website: no build step, no dependencies, so it runs 
 |---|---|
 | Talk | Korean (technical terms in English) — script in [`scripts/script.ko.md`](scripts/script.ko.md) |
 | Slides | KO / EN, chosen on the cover (toggle any time with **L**) |
-| Length | 24 slides, 19:10 planned + ~0:50 slack = 20 min |
+| Length | 25 slides, 19:35 planned + ~0:25 slack = 20 min |
 
 ## Flow
 
 1. **웹의 세 기둥** — how a browser shows a page, HTML (hover code ↔ element), CSS and JS (live editors), how they connect
 2. **직접 만들기** — a real *Task board* in plain JavaScript (DOM, localStorage) running live in the slide, plus fetch and axios error-handling examples (code only)
 3. **프레임워크 & React** — built on top of those fundamentals: why frameworks, the landscape (React, Svelte, …), 4 essential React techniques
-4. **이제 당신 차례** — project ideas (dice), then an appendix-style setup block (Node, npm, `test` / `build` / `audit` / `deploy`, GitHub Pages `base` pitfall), learning resources, wrap-up
+4. **이제 당신 차례** — project ideas (dice), then an appendix-style setup block (Node, npm, `npm create vite@latest`, `test` / `build` / `audit` / `deploy`, GitHub Pages `base` pitfall), learning resources, wrap-up
 
 ## Run
 
