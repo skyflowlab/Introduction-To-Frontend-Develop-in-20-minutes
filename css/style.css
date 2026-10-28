@@ -163,6 +163,7 @@ pre.code { margin: 0; padding: 14px 18px; font: 19px/1.5 var(--mono); white-spac
 .codeblock.scroll pre.code { font-size: 17.5px; max-height: 190px; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .codeblock.scroll pre.code { position: relative; }
 .codeblock.scroll.tall pre.code { font-size: 18.5px; max-height: 330px; }
+.codeblock.scroll.tall.xl pre.code { max-height: 470px; font-size: 17.5px; }
 .codeblock.scroll { position: relative; }
 .codeblock.scroll::after { content: '⇵'; position: absolute; right: 10px; top: 6px; color: var(--muted); font-size: 13px; pointer-events: none; }
 .tk-c { color: var(--tk-c); font-style: italic; } .tk-s { color: var(--tk-s); } .tk-k { color: var(--tk-k); }

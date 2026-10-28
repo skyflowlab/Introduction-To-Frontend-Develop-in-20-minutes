@@ -216,6 +216,33 @@ async function loadTasks() {
   }
 }`;
 
+  S.axiosErr = `import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'https://api.example.com',
+  timeout: 5000,                 // no answer in 5s -> error
+});
+
+async function loadTasks() {
+  try {
+    const { data } = await api.get('/tasks');   // 4xx / 5xx throw too
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      if (err.response) {
+        // the server answered with an error status
+        console.error(err.response.status, err.response.data);
+      } else if (err.request) {
+        // sent, but no answer: offline, DNS, timeout
+        console.error('No response:', err.code);
+      }
+    } else {
+      console.error('Unexpected:', err);        // a bug in our code
+    }
+    throw err;                                   // let the UI decide
+  }
+}`;
+
   /* ---------- Framework comparison ---------- */
   S.cmpVanilla = `const btn = document.querySelector('#btn');
 let n = 0;

@@ -296,6 +296,27 @@ localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. �
 
     /* ===================================================== 4. FRAMEWORKS */
     {
+      id: 'axios',
+      part: 2,
+      sec: 50,
+      title: { ko: 'Step 4 — axios와 에러 처리', en: 'Step 4 — axios & error handling' },
+      notes: `방금 본 fetch를 실무에서는 axios라는 라이브러리로 대신하는 경우가 많습니다. npm install axios로 설치하고, 오늘 배운 npm이 바로 이럴 때 쓰입니다. ▶ 이 예제는 코드로만 보여드립니다.
+axios의 큰 장점은 에러 처리가 일관된다는 점입니다. fetch는 404나 500이 와도 에러를 던지지 않아서 res.ok를 직접 확인해야 했죠. axios는 2xx가 아니면 알아서 예외를 던집니다. 그래서 try-catch 하나로 처리할 수 있어요.
+catch에서는 에러를 세 종류로 나눠 보세요. 첫째, error.response가 있으면 서버가 응답은 했지만 4xx나 5xx를 준 겁니다. 상태 코드와 data를 보고 "로그인 필요", "없는 데이터" 같은 메시지를 정합니다. 둘째, error.request만 있으면 요청은 나갔는데 응답이 없는 겁니다. 오프라인이나 타임아웃이고, 그래서 timeout 옵션을 꼭 지정합니다. 셋째, 둘 다 없으면 우리 코드의 버그입니다.
+마지막으로 에러를 삼키지 말고 다시 던져서, 화면 쪽에서 사용자에게 알려 주도록 하세요. 코드가 길면 스크롤해서 보시면 됩니다.`,
+      render: ({ t, code, ic }) => `
+        <div class="cols" style="grid-template-columns:7fr 5fr">
+          ${code('js', S.axiosErr, { cls: 'scroll tall xl', label: 'npm install axios' })}
+          <div class="side">
+            <div class="frag callout"><h4>1 · ${ic('err.response')}</h4><p>${t('서버가 <b>에러 상태</b>로 응답 (4xx · 5xx) → 상태 코드와 메시지로 안내', 'the server replied with an <b>error status</b> (4xx · 5xx) → show a message')}</p></div>
+            <div class="frag callout"><h4>2 · ${ic('err.request')}</h4><p>${t('<b>응답 없음</b> — 오프라인 · 타임아웃 → <code class="ic">timeout</code> 필수', '<b>no reply</b> — offline · timeout → always set <code class="ic">timeout</code>')}</p></div>
+            <div class="frag callout"><h4>3 · ${t('그 외', 'Otherwise')}</h4><p>${t('우리 코드의 <b>버그</b> — 삼키지 말고 다시 throw', 'a <b>bug</b> in our code — rethrow, never swallow')}</p></div>
+            <div class="frag callout rec"><h4>fetch vs axios</h4><p>${t('fetch는 404도 성공 처리 → <code class="ic">res.ok</code> 확인. axios는 2xx 밖이면 <b>자동으로 throw</b>', 'fetch treats 404 as success → check <code class="ic">res.ok</code>. axios <b>throws</b> outside 2xx')}</p></div>
+          </div>
+        </div>`,
+    },
+
+    {
       id: 'why-fw',
       part: 3,
       sec: 55,
