@@ -294,7 +294,6 @@ localStorage는 브라우저에 문자열을 저장하는 작은 창고예요. �
         </div>`,
     },
 
-    /* ===================================================== 4. FRAMEWORKS */
     {
       id: 'axios',
       part: 2,
@@ -315,6 +314,8 @@ catch에서는 에러를 세 종류로 나눠 보세요. 첫째, error.response�
           </div>
         </div>`,
     },
+
+    /* ===================================================== 4. FRAMEWORKS */
 
     {
       id: 'why-fw',
@@ -362,7 +363,7 @@ UI는 React, Vue, Svelte, Solid, Angular. 메타 프레임워크는 Next.js, Nux
           <div class="frag callout"><h4>✨ ${t('요즘 흐름', "What's new")}</h4>
             <p><i class="chip new">Svelte 5 runes</i> <i class="chip new">Signals</i> <i class="chip new">React Compiler</i> <i class="chip new">Server Components</i> <i class="chip new">Astro islands</i> <i class="chip new">Rust tooling</i></p></div>
           <div class="frag callout rec"><h4>🧭 ${t('첫 선택', 'Where to start')}</h4>
-            <p><b>React + Vite + TypeScript</b><br><small class="muted">${t('자료 · 일자리 · 생태계 최대 / 가볍게 시작하려면 Svelte', 'largest ecosystem & job market / Svelte for a lighter start')}</small></p></div>
+            <p><b>React on Vite</b><br><small class="muted">${t('자료 · 일자리 · 생태계 최대 / 가볍게 시작하려면 Svelte', 'largest ecosystem & job market / Svelte for a lighter start')}</small></p></div>
         </div>`,
     },
 
@@ -564,7 +565,7 @@ npm install 패키지이름으로 라이브러리를 설치하면 dependencies�
             )}
             <p class="frag note">${t('질문 없이 한 번에:', 'Skip the prompts:')} ${ic('npm create vite@latest my-app -- --template react-ts')}</p>
             <div class="frag callout" style="margin-top:10px"><h4>Variant: JavaScript · TypeScript</h4>
-              <p>${t('<b>TypeScript</b> = JavaScript + <b>타입</b>. 브라우저는 JS만 실행하므로 <b>JS로 변환</b>되어 돌아갑니다. 선택 사항이고, 나중에 도입해도 됩니다.', '<b>TypeScript</b> = JavaScript + <b>types</b>. Browsers only run JS, so it is <b>compiled to JS</b>. Optional — you can adopt it later.')}</p></div>
+              <p>${t('<b>TypeScript</b> = JavaScript + <b>타입</b>. 브라우저는 JS만 실행하므로 <b>JS로 변환</b>되어 돌아갑니다. 나중에 도입해도 됩니다.', '<b>TypeScript</b> = JavaScript + <b>types</b>. Browsers only run JS, so it is <b>compiled to JS</b>. Optional — you can adopt it later.')}</p></div>
           </div>
           <div>
             <div class="frag">${code('txt', S.viteTree, { size: 'sm', label: 'my-app/' })}</div>
