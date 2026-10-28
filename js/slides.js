@@ -547,7 +547,7 @@ npm install 패키지이름으로 라이브러리를 설치하면 dependencies�
       sec: 40,
       title: { ko: 'Vite — 명령 한 줄로 프로젝트 시작', en: 'Vite — a project in one command' },
       notes: `이제 npm을 알았으니, 프로젝트를 처음부터 손으로 세팅할 필요 없이 명령 한 줄로 시작하는 방법입니다. npm create vite@latest 입니다. 개발 환경을 만드는 방법은 여러 가지인데, 이건 그중 Vite를 쓰는 방법이라는 점을 먼저 말씀드립니다. Next.js, SvelteKit, Astro도 각자 비슷한 생성 명령을 제공합니다.
-▶ 이 명령을 실행하면 프로젝트 이름과 프레임워크를 묻습니다. React, Svelte, Vue, 그리고 Vanilla, 오늘 배운 순수 JavaScript도 고를 수 있고, TypeScript 변형도 고를 수 있어요. 이름 뒤에 두 줄 하이픈과 template 옵션을 붙이면 질문 없이 한 번에 만들 수도 있습니다.
+▶ 이 명령을 실행하면 프로젝트 이름과 프레임워크를 묻습니다. React, Svelte, Vue, 그리고 Vanilla, 오늘 배운 순수 JavaScript도 고를 수 있고, TypeScript 변형도 고를 수 있어요. 여기서 Variant 질문이 나오는데, TypeScript는 JavaScript에 타입을 더한 언어입니다. 변수나 함수 인자가 어떤 값이어야 하는지 적어 두면 실행 전에 실수를 잡아 줘요. 브라우저는 JavaScript만 실행하기 때문에 빌드할 때 JS로 변환됩니다. 필수는 아니라서, 처음엔 JavaScript로 시작하고 나중에 도입해도 됩니다. 이름 뒤에 두 줄 하이픈과 template 옵션을 붙이면 질문 없이 한 번에 만들 수도 있습니다.
 그다음 cd로 들어가서 npm install, npm run dev. 개발 서버가 뜨고, 파일을 저장하면 브라우저가 바로 갱신됩니다. 이걸 HMR, Hot Module Replacement라고 합니다. 페이지 전체를 새로고침하지 않고 바뀐 모듈만 교체해서, 입력 중이던 상태도 그대로 유지되기 때문에 개발 속도가 크게 빨라집니다. 배포용 빌드는 npm run build로 만들고 결과는 dist 폴더에 생기는데, 이건 다음 장에서 봅니다.
 오른쪽 폴더 구조를 보세요. index.html이 시작점이고, src 안에 우리 코드가, package.json에는 앞에서 본 scripts가 이미 들어 있습니다. 이제 다음 장에서 이 scripts의 test, build, audit, deploy를 봅니다.`,
       render: ({ t, terminal, code, ic }) => `
@@ -563,6 +563,8 @@ npm install 패키지이름으로 라이브러리를 설치하면 dependencies�
               { title: 'start' }
             )}
             <p class="frag note">${t('질문 없이 한 번에:', 'Skip the prompts:')} ${ic('npm create vite@latest my-app -- --template react-ts')}</p>
+            <div class="frag callout" style="margin-top:10px"><h4>Variant: JavaScript · TypeScript</h4>
+              <p>${t('<b>TypeScript</b> = JavaScript + <b>타입</b>. 브라우저는 JS만 실행하므로 <b>JS로 변환</b>되어 돌아갑니다. 선택 사항이고, 나중에 도입해도 됩니다.', '<b>TypeScript</b> = JavaScript + <b>types</b>. Browsers only run JS, so it is <b>compiled to JS</b>. Optional — you can adopt it later.')}</p></div>
           </div>
           <div>
             <div class="frag">${code('txt', S.viteTree, { size: 'sm', label: 'my-app/' })}</div>
